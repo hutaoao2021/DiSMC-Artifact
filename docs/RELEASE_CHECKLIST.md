@@ -7,7 +7,7 @@
 | Repository path | Size (bytes) | SHA-256 |
 | --- | ---: | --- |
 | `artifact/DiSMC-source-20261102-release.zip` | 317963 | `40171c00e8c1d92c543560e084e9646897336ec7bff2c3d856f57a57d2e7c92e` |
-| `supplementary/DiSMC-supplementary-20261110.pdf` | 356472 | `a4f92431326f58ddcebf7d4097c66b6923ab7268c3c809246f697ae6b7fc5c6f` |
+| `supplementary/DiSMC-supplementary-20261110.pdf` | 356142 | `463e60e17089b08b6369d6164058908e4c647591edd8275c7f16c9a24ce9fa6f` |
 
 **Table IX is supplementary, not a required principal release artifact.** A sanitized evidence ZIP has also been uploaded by the author at `results/table_ix_5pct/DiSMC_TableIX_5pct_public_records.zip`, with locally checked SHA-256 `8382d80aad038d81075c5e986fac0f1ada8d9ba0ae8b8b10a1e7a03494cf2a89`. Its presence does not change the two core deliverables.
 
@@ -19,9 +19,7 @@
 - `results/`: paper-reported aggregates, their scope and limits.
 - `docs/EXPERIMENT_INDEX.md`: figure/table navigation.
 
-**Pre-publication PDF wording check (2026-11-11):** The currently uploaded supplementary PDF still names historical internal artifact directories as if they were included in this repository. A minimally revised 18-page PDF has been prepared separately to clarify that these historical records and snapshots are not bundled. **Do not switch to Public or claim the replacement is uploaded until the new PDF replaces the old one and the SHA-256 values in this document and supplementary/README.md are updated.**
-
- The minimally revised replacement PDF is **18 pages**, and its SHA-256 is `463e60e17089b08b6369d6164058908e4c647591edd8275c7f16c9a24ce9fa6f` (prepared locally, **not uploaded**). Replace the existing `supplementary/DiSMC-supplementary-20261110.pdf` with these bytes, then refresh that file's checksum in this checklist and `supplementary/README.md`.
+**Supplementary PDF wording check (completed 2026-11-11):** The revised 18-page PDF clarifies references to historical internal artifact directories. The updated PDF is stored at the documented path, and its Git blob SHA-1 (`fd30a699df366789667a90bea02834717adf5a00`) matches the locally checked revised file. Historical snapshots and raw logs are not claimed to be bundled.
 
 ## Validate before release
 
