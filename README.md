@@ -14,12 +14,10 @@ This repository collects the DiSMC research-paper artifact. The implementation i
 | [`supplementary/DiSMC-supplementary-20261110.pdf`](supplementary/DiSMC-supplementary-20261110.pdf) | Final supplementary technical document (**uploaded; checksum verified**) |
 | [`docs/INSTALL.md`](docs/INSTALL.md) | Software requirements, compilation, selected regression checks, and smoke test |
 | [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Execution modes, configuration boundaries, provenance and validation scope |
-| [`docs/EXPERIMENT_INDEX.md`](docs/EXPERIMENT_INDEX.md) | Navigation from paper figures and tables to experiment categories |
 | [`configs/experiment-settings.md`](configs/experiment-settings.md) | Paper-specific workload, budget, query and measurement registry |
 | [`configs/run-commands.md`](configs/run-commands.md) | Source-backed launcher syntax, templates and known configuration limitations |
 | [`configs/fixed-query-coordinates.csv`](configs/fixed-query-coordinates.csv) | Eight fixed online queries, positional controls and full-data coordinates |
 | [`results/README.md`](results/README.md) | Paper-reported aggregate results and their interpretation limits |
-| [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | Core file checksums and public-access verification checklist |
 | [`data/README.md`](data/README.md) | Dataset sources, input preparation and redistribution limitations |
 
 ## Quick start
@@ -46,7 +44,7 @@ If Maven is installed, `build.sh` uses Maven; otherwise it compiles the Java sou
 
 ## Reproducing paper experiments
 
-Use [the reproducibility guide](docs/REPRODUCIBILITY.md), [the experiment index](docs/EXPERIMENT_INDEX.md), and the [experiment settings](configs/experiment-settings.md) / [command templates](configs/run-commands.md), and the [published result tables](results/README.md) together. The paper distinguishes complete online end-to-end measurements, frozen-state replay, and component-only measurements. These scopes must not be mixed.
+Use [the reproducibility guide](docs/REPRODUCIBILITY.md), [the experiment settings and figure index](configs/experiment-settings.md), [the run-command guide](configs/run-commands.md), and the [published result tables](results/README.md) together. The paper distinguishes complete online end-to-end measurements, frozen-state replay, and component-only measurements. These scopes must not be mixed.
 
 For clustered runs, set `SPARK_MASTER` and the executor/driver resources deliberately. The source launcher is `scripts/run_profile.sh`. Parameter and command guidance is available in `configs/`; some historical experimental states and exact runtime options remain outside the generic launcher. The five-point smoke command is not an exact paper benchmark command.
 
