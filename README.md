@@ -2,52 +2,55 @@
 
 **DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries**
 
-This repository organizes the DiSMC implementation, its supplementary technical document, and instructions for running the provided checks and experiments. DiSMC targets distributed skyline micro-cluster queries with dependency-complete task inputs, coordinated physical planning, and safe reuse of probe computations.
+This repository is being prepared for the DiSMC research-paper artifact. The implementation is a Java/Spark system for distributed skyline micro-cluster queries with dependency-complete task inputs, joint physical planning, and safe reuse of completed probe work.
 
-## Repository layout
+> **Release status (2026-11-10):** The source ZIP and supplementary PDF listed below have **not yet been uploaded to this repository**. The repository is currently private and should not be presented as a complete, publicly accessible artifact. The documentation below describes the intended release layout.
 
-| Location | Contents |
+## Package index
+
+| Path | Purpose |
 | --- | --- |
-| `artifact/DiSMC-source-20261102-release.zip` | Java/Spark implementation, build and launch scripts, regression tests, and five-point example (source archive) |
-| `supplementary/DiSMC-supplementary-20261110.pdf` | Supplementary experimental protocols, detailed measurements, and correctness arguments |
-| `docs/REPRODUCIBILITY.md` | Environment requirements, building, checks, and execution notes |
-| `docs/EXPERIMENT_INDEX.md` | Guide to the main-paper experimental results |
-| `data/README.md` | Dataset provenance and preparation protocol |
-
-The archive and PDF paths above are the intended locations for the corresponding release files. See the repository file list to confirm which files are currently available.
+| `artifact/DiSMC-source-20261102-release.zip` | Integrated Java/Spark source, tests, launch scripts, and five-point fixture (**pending upload**) |
+| `supplementary/DiSMC-supplementary-20261110.pdf` | Final supplementary technical document (**pending upload**) |
+| [`docs/INSTALL.md`](docs/INSTALL.md) | Software requirements, compilation, selected regression checks, and smoke test |
+| [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Execution modes, configuration boundaries, provenance and validation scope |
+| [`docs/EXPERIMENT_INDEX.md`](docs/EXPERIMENT_INDEX.md) | Navigation from paper figures and tables to experiment categories |
+| [`data/README.md`](data/README.md) | Dataset sources, input preparation and redistribution limitations |
 
 ## Quick start
 
-The supplied source archive is structured as a Maven-compatible Java project. After extracting it into `DiSMC-source/`, use a Linux or compatible Bash environment with **JDK 8** and **Apache Spark 3.2.0 (Scala 2.12)**.
+The packaged source archive extracts into a `DiSMC-source/` directory. On Linux or a compatible Bash environment with **JDK 8** and **Apache Spark 3.2.0 (Scala 2.12)**:
 
 ```bash
+unzip artifact/DiSMC-source-20261102-release.zip
 cd DiSMC-source
 export JAVA_HOME=/path/to/jdk8
+export PATH="$JAVA_HOME/bin:$PATH"
 export SPARK_HOME=/path/to/spark-3.2.0
+
 bash build.sh
 bash scripts/check_selected.sh
-bash scripts/run_small_online.sh /absolute/new/output/diSMC-small.txt
+
+OUT_DIR="$(mktemp -d)"
+bash scripts/run_small_online.sh "$OUT_DIR/smoke.txt"
 ```
 
-The synthetic example is a local `local[2]` test and requests a 5% additional-input record budget. Use a new output path for each run.
+The last command uses the bundled five-point example, Spark `local[2]`, a 5% additional-input-record budget, and member export. It is a **small functionality check**, not a reproduction of the paper's large-scale performance results. Use a new output path for each run.
 
-For cluster execution, set `SPARK_HOME`, `SPARK_MASTER`, resource limits, and the query coordinates explicitly. Consult the source archive's launcher README and `docs/REPRODUCIBILITY.md` for the available method profiles.
+If Maven is installed, `build.sh` uses Maven; otherwise it compiles the Java sources with JDK tools and the Spark runtime JARs. The selected-check script requires `SPARK_HOME` in either case.
 
-## Evaluation guide
+## Reproducing paper experiments
 
-The main paper presents full-query comparisons, distributed baselines, scalability experiments, dependency-input controls, planner controls, and probe-reuse controls. `docs/EXPERIMENT_INDEX.md` maps these groups to the manuscript figures. The supplementary PDF records the detailed measurement protocols and associated tables.
+Use [the reproducibility guide](docs/REPRODUCIBILITY.md) and [the experiment index](docs/EXPERIMENT_INDEX.md) together. The paper distinguishes complete online end-to-end measurements, frozen-state replay, and component-only measurements. These scopes must not be mixed.
 
-## Data
+For clustered runs, set `SPARK_MASTER` and the executor/driver resources deliberately. The source launcher is `scripts/run_profile.sh`. Paper-scale parameters, data subset definitions and fully specified commands are being organized separately; the five-point smoke command is not an exact paper benchmark command.
 
-GeoLife and TDrive use prepared two-dimensional coordinates derived from their respective trajectory collections. The preparation convention and reproducibility notes are documented in `data/README.md`. Raw third-party datasets are not redistributed through this repository unless their distribution terms permit it.
+The source is a **2026-11-02 integrated release** including the recorded numerical correction and portable shell packaging, not the byte-identical historical executable used for every published timing. Its bundled `VERIFICATION.json` reports earlier checks; the full paper performance suite has not been rerun with this integrated release.
 
-## Version identification
+## Data and supplementary materials
 
-The source archive is identified by its 2026-11-02 release label and contains `SOURCE_MANIFEST.json` and `VERIFICATION.json`. The main paper's experimental conditions and any source-release regression checks should be interpreted according to their stated protocols.
+The repository does not redistribute third-party GeoLife or TDrive raw datasets. See [data preparation notes](data/README.md) for provenance and preprocessing conventions. The supplementary PDF supplies additional protocols, result tables, figures and correctness arguments.
 
 ## Citation
 
-If you use this artifact, please cite:
-
 *DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries.*
-
