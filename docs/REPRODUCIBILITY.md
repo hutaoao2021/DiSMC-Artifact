@@ -80,4 +80,4 @@ The source archive includes:
 
 ## 6. Interpreting experiments
 
-The manuscript separates **complete online E2E**, **frozen-state replay**, and **component-only diagnostics**. Use consistent data subsets, query locations, budgets, profiles, timing boundaries and aggregation rules. See [the experiment index](EXPERIMENT_INDEX.md), the [dataset notes](../data/README.md) and the final supplementary PDF. A five-point smoke result does not validate large-scale performance claims.
+The manuscript separates **complete online E2E**, **frozen-state replay**, and **component-only diagnostics**. Use consistent data subsets, query locations, budgets, profiles, timing boundaries and aggregation rules. See [the experimental settings and figure index](../configs/experiment-settings.md), the [dataset notes](../data/README.md) and the [final supplementary PDF](../supplementary/DiSMC-supplementary-20261110.pdf). A five-point smoke result does not validate large-scale performance claims.
