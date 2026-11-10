@@ -4,7 +4,7 @@
 
 This repository collects the DiSMC research-paper artifact. The implementation is a Java/Spark system for distributed skyline micro-cluster queries with dependency-complete task inputs, joint physical planning, and safe reuse of completed probe work.
 
-> **Release status (2026-11-11):** The source ZIP and the final supplementary PDF are uploaded and their Git blob hashes match the locally verified files. The repository remains **Private**, so anonymous access and public release are **not yet confirmed**.
+> **Release status (2026-11-11):** This repository is **Public**. The source ZIP and final supplementary PDF are uploaded, and their Git blob hashes match locally verified release files. Independent anonymous-browser download verification remains a final external check.
 
 ## Package index
 
@@ -19,7 +19,7 @@ This repository collects the DiSMC research-paper artifact. The implementation i
 | [`configs/run-commands.md`](configs/run-commands.md) | Source-backed launcher syntax, templates and known configuration limitations |
 | [`configs/fixed-query-coordinates.csv`](configs/fixed-query-coordinates.csv) | Eight fixed online queries, positional controls and full-data coordinates |
 | [`results/README.md`](results/README.md) | Paper-reported aggregate results and their interpretation limits |
-| [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | Core file checksums and remaining pre-publication verification checklist |
+| [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | Core file checksums and public-access verification checklist |
 | [`data/README.md`](data/README.md) | Dataset sources, input preparation and redistribution limitations |
 
 ## Quick start
