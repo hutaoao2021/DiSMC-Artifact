@@ -31,7 +31,7 @@ For the complete experiment matrix, see [`configs/experiment-settings.md`](../co
 - The numeric values in the CSVs are matched to the **final manuscript/source plotting arrays** and the supplement.
 - The reported supplementary Table IX charges were checked separately using author-provided per-owner records during manuscript preparation. A raw-record ZIP is **not** a required release deliverable.
 - We have **not** independently executed the entire large-scale Spark experiment suite or acquired all original dataset hashes as part of this release preparation.
-- The main source ZIP and the final supplementary PDF are **uploaded** to the **Private** repository; anonymous download has not yet been verified. They should not be described as publicly accessible until the repository is released.
+- The main source ZIP and final supplementary PDF are uploaded to the **Public** repository. Their recorded Git blobs match locally checked files; independent signed-out download verification remains pending.
 
 ## Validation guide
 
