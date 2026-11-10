@@ -1,0 +1,3 @@
+dataset,prepared_points,query_x_m,query_y_m,radius_m,k,owners,executor_cores,R0,budget_fraction,budget_records,physical_tasks,split_owners,full_parent_fee_computed,dependency_fee_observed,dependency_budget_utilization_percent,fee_reduction_percent,dependency_one_run_e2e_s,full_parent_timed
+GeoLife,2000000,15,15,20,2,200,40,3606291,0.05,180314,226,14,308095,174393,96.716283816,43.396355020,92.120,false
+TDrive,3000000,15,15,75,2,200,40,5308365,0.05,265418,270,16,983097,259343,97.711157495,73.619795402,83.793,false
