@@ -19,6 +19,8 @@
 - `results/`: paper-reported aggregates, their scope and limits.
 - `docs/EXPERIMENT_INDEX.md`: figure/table navigation.
 
+**Pre-publication PDF wording check (2026-11-11):** The currently uploaded supplementary PDF still names historical internal artifact directories as if they were included in this repository. A minimally revised 18-page PDF has been prepared separately to clarify that these historical records and snapshots are not bundled. **Do not switch to Public or claim the replacement is uploaded until the new PDF replaces the old one and the SHA-256 values in this document and supplementary/README.md are updated.**
+
 ## Validate before release
 
 1. **Completed:** both core binaries are present, and Git blob SHA-1 values match locally verified bytes. For an independent end-to-end check, download each file from GitHub and compare SHA-256 with this checklist.
