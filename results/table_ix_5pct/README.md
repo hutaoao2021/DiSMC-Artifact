@@ -12,6 +12,8 @@ This case is **separate from** main-paper Fig. 10's three-run Full-parent/Depend
 
 The original `executed_command.sh` and some logs contain **internal absolute paths and a private-network address**. Those paths are not required to understand the metric and must be parameterized/redacted before public release. If a *sanitized* ZIP is published, its SHA-256 will be different and must be recorded separately.
 
+**Prepared public evidence ZIP (pending upload):** `DiSMC_TableIX_5pct_public_records.zip`, SHA-256 `8382d80aad038d81075c5e986fac0f1ada8d9ba0ae8b8b10a1e7a03494cf2a89`. This derivative preserves original per-owner candidate records, per-task input populations, original selected plans and original accounting data, but **excludes sensitive commands, logs and observation/manifest payloads**. Its two regenerated SHA-256 manifests cover the included files. The supplied original verifier was run on the derivative and passed for both datasets. The prepared file exists as a local artifact; it has **not yet been uploaded to GitHub**.
+
 ## Query and outcome
 
 | Parameter | GeoLife | TDrive |
