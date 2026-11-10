@@ -33,14 +33,16 @@ The original `executed_command.sh` and some logs contain **internal absolute pat
 
 Only the Dependency plan was executed (one run per dataset). The original summaries additionally record 92.120 s and 83.793 s for these Dependency runs; **there is no Full-parent runtime** for the over-budget alternative. Do not compare these single-run diagnostics to the three-run online Fig. 10 medians.
 
-## Verification with the original ZIP
+## Verification with the public evidence ZIP
 
-After making the archive available locally:
+Once the prepared sanitized ZIP has been uploaded to `results/table_ix_5pct/`, download and verify it:
 
 ```bash
-unzip DiSMC_TableIX_5pct_raw_records_20261110.zip -d table_ix_raw
+unzip DiSMC_TableIX_5pct_public_records.zip -d table_ix_raw
 python table_ix_raw/tableIX_formal5_20261110/verify_records.py
 ```
+
+Expected result: both `geolife PASS` and `tdrive PASS`. This exact command has been run against the local public ZIP and passed. It does not rerun Spark or recover omitted original server logs.
 
 The script provided *inside that ZIP* checks file SHA-256 values against `raw_record_manifest.json`, checks each selected plan checksum, aggregates exact per-owner charges and cross-checks selected task-input populations. Its key arithmetic definitions are:
 
