@@ -11,10 +11,8 @@ This directory publishes **machine-readable paper-reported aggregate results** a
 | [`core_scaling.csv`](core_scaling.csv) | Main Fig. 9 | GeoLife/TDrive executor-core sweep; 3-run **mean and sample SD**, complete online E2E |
 | [`input_policy.csv`](input_policy.csv) | Main Fig. 10 / Supplement input-policy table | Full-parent vs Dependency at *matched acquisition/work/Engine*, 3-run **medians**. Different selected plans are allowed. |
 | [`full_data.csv`](full_data.csv) | Main Table I | Complete-output GeoLife/TDrive **10% cap** runs, 3-run **mean and sample SD** |
-| [`table_ix_5pct.csv`](table_ix_5pct.csv) | Supplement **Table IX** | Distinct **5% fixed-responsibility budget-feasibility diagnostic** from raw records, not the Fig. 10 E2E comparison |
-| [`table_ix_5pct/README.md`](table_ix_5pct/README.md) | Supplement Table IX | Optional verification note for the supplementary budget diagnostic; no standalone evidence ZIP is required |
 
-For the complete experiment matrix, see [`configs/experiment-settings.md`](../configs/experiment-settings.md) and the [experiment index](../docs/EXPERIMENT_INDEX.md). The final 18-page supplementary PDF has additional tables and the definitions of controls not transcribed as separate CSVs here. **Not every figure is represented by a standalone numeric CSV**, and CSV presence must not be interpreted as full raw-log availability.
+For the complete experiment matrix and manuscript figure index, see [experimental settings](../configs/experiment-settings.md). The final 18-page supplementary PDF has additional tables and the definitions of controls not transcribed as separate CSVs here. **Not every figure is represented by a standalone numeric CSV**, and CSV presence must not be interpreted as full raw-log availability.
 
 ## Strict interpretation notes
 
@@ -35,4 +33,4 @@ For the complete experiment matrix, see [`configs/experiment-settings.md`](../co
 
 ## Validation guide
 
-To check the published CSV scopes, compare each row with the figure/table caption and the [configuration registry](../configs/experiment-settings.md). For the supplementary Table IX metric boundary, see [the short verification note](table_ix_5pct/README.md). For launching a fresh run, see [source-backed commands](../configs/run-commands.md); the smoke test is a functionality check, not a performance reproduction.
+To check the published CSV scopes, compare each row with the figure/table caption and the [configuration registry](../configs/experiment-settings.md). Table IX is documented in the [supplementary PDF](../supplementary/DiSMC-supplementary-20261110.pdf), without a separate standalone evidence bundle. For launching a fresh run, see [source-backed commands](../configs/run-commands.md); the smoke test is a functionality check, not a performance reproduction.
