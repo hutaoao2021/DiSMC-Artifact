@@ -62,4 +62,4 @@ The output path and associated sidecar paths must not already exist. Inspect the
 
 ## 6. Next steps
 
-For cluster execution, supported profiles and argument order, use [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md). For individual manuscript figures and tables, consult [`EXPERIMENT_INDEX.md`](EXPERIMENT_INDEX.md) and the supplementary document. Large performance measurements require their recorded input subsets, configurations and resources.
+For cluster execution, supported profiles and argument order, use [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md). For individual manuscript figures and tables, consult the [experimental settings and figure index](../configs/experiment-settings.md) and the [supplementary document](../supplementary/DiSMC-supplementary-20261110.pdf). Large performance measurements require their recorded input subsets, configurations and resources.
