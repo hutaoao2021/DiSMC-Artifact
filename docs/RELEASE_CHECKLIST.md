@@ -1,6 +1,6 @@
 # DiSMC Artifact — release checklist
 
-**Status (2026-11-11):** The source ZIP and supplementary PDF have been **uploaded** to the **Private** repository. Their Git blob hashes match the locally checked files. Public/anonymous download testing is still pending.
+**Status (2026-11-11):** The repository is **Public**. The source ZIP and final supplementary PDF are uploaded, and their Git blob hashes match the locally checked files. Anonymous-browser download testing remains a final external check.
 
 ## Required uploaded files
 
@@ -29,8 +29,8 @@
 4. Open the supplementary PDF and verify it has **18 pages**, including the updated 5% Table IX diagnostic.
 5. Confirm README, documentation and result-file links. Check for secrets, credentials and private path disclosures.
 6. Confirm coauthor approval and any source distribution rights; decide license separately.
-7. Keep the repo Private until both file and documentation checks are complete. Only then, with authorization, change to Public.
-8. After publication, confirm the files can be downloaded **without signing in**. Then update the CMT Availability field.
+7. **Completed:** repository visibility was changed to **Public** after author authorization. Confirm no private credentials or personal data have been published.
+8. **Still to verify independently:** open the repository and download both core files in a signed-out/incognito browser. Then replace the CMT Availability placeholder with the public repository URL.
 
 ## Interpretation boundaries
 
