@@ -2,16 +2,16 @@
 
 **DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries**
 
-This repository is being prepared for the DiSMC research-paper artifact. The implementation is a Java/Spark system for distributed skyline micro-cluster queries with dependency-complete task inputs, joint physical planning, and safe reuse of completed probe work.
+This repository collects the DiSMC research-paper artifact. The implementation is a Java/Spark system for distributed skyline micro-cluster queries with dependency-complete task inputs, joint physical planning, and safe reuse of completed probe work.
 
-> **Release status (2026-11-10):** The source ZIP and supplementary PDF listed below have **not yet been uploaded to this repository**. The repository is currently private and should not be presented as a complete, publicly accessible artifact. The documentation below describes the intended release layout.
+> **Release status (2026-11-11):** The source ZIP and the final supplementary PDF are uploaded and their Git blob hashes match the locally verified files. The repository remains **Private**, so anonymous access and public release are **not yet confirmed**.
 
 ## Package index
 
 | Path | Purpose |
 | --- | --- |
-| `artifact/DiSMC-source-20261102-release.zip` | Integrated Java/Spark source, tests, launch scripts, and five-point fixture (**pending upload**) |
-| `supplementary/DiSMC-supplementary-20261110.pdf` | Final supplementary technical document (**pending upload**) |
+| `artifact/DiSMC-source-20261102-release.zip` | Integrated Java/Spark source, tests, launch scripts, and five-point fixture (**uploaded; checksum verified**) |
+| `supplementary/DiSMC-supplementary-20261110.pdf` | Final supplementary technical document (**uploaded; checksum verified**) |
 | [`docs/INSTALL.md`](docs/INSTALL.md) | Software requirements, compilation, selected regression checks, and smoke test |
 | [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Execution modes, configuration boundaries, provenance and validation scope |
 | [`docs/EXPERIMENT_INDEX.md`](docs/EXPERIMENT_INDEX.md) | Navigation from paper figures and tables to experiment categories |
@@ -19,7 +19,7 @@ This repository is being prepared for the DiSMC research-paper artifact. The imp
 | [`configs/run-commands.md`](configs/run-commands.md) | Source-backed launcher syntax, templates and known configuration limitations |
 | [`configs/fixed-query-coordinates.csv`](configs/fixed-query-coordinates.csv) | Eight fixed online queries, positional controls and full-data coordinates |
 | [`results/README.md`](results/README.md) | Paper-reported aggregate results and their interpretation limits |
-| [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | Two required binary upload paths, checksums and public-access verification checklist |
+| [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | Core file checksums and remaining pre-publication verification checklist |
 | [`data/README.md`](data/README.md) | Dataset sources, input preparation and redistribution limitations |
 
 ## Quick start
@@ -48,7 +48,7 @@ If Maven is installed, `build.sh` uses Maven; otherwise it compiles the Java sou
 
 Use [the reproducibility guide](docs/REPRODUCIBILITY.md), [the experiment index](docs/EXPERIMENT_INDEX.md), and the [experiment settings](configs/experiment-settings.md) / [command templates](configs/run-commands.md), and the [published result tables](results/README.md) together. The paper distinguishes complete online end-to-end measurements, frozen-state replay, and component-only measurements. These scopes must not be mixed.
 
-For clustered runs, set `SPARK_MASTER` and the executor/driver resources deliberately. The source launcher is `scripts/run_profile.sh`. Paper-scale parameters, data subset definitions and fully specified commands are being organized separately; the five-point smoke command is not an exact paper benchmark command.
+For clustered runs, set `SPARK_MASTER` and the executor/driver resources deliberately. The source launcher is `scripts/run_profile.sh`. Parameter and command guidance is available in `configs/`; some historical experimental states and exact runtime options remain outside the generic launcher. The five-point smoke command is not an exact paper benchmark command.
 
 The source is a **2026-11-02 integrated release** including the recorded numerical correction and portable shell packaging, not the byte-identical historical executable used for every published timing. Its bundled `VERIFICATION.json` reports earlier checks; the full paper performance suite has not been rerun with this integrated release.
 
