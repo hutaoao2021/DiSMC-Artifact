@@ -8,8 +8,8 @@ This repository organizes the DiSMC implementation, its supplementary technical 
 
 | Location | Contents |
 | --- | --- |
-| `artifact/DiSMC-source-20261102.zip` | Java/Spark implementation, build and launch scripts, regression tests, and five-point example (source archive) |
-| `supplementary/supplementary.pdf` | Supplementary experimental protocols, detailed measurements, and correctness arguments |
+| `artifact/DiSMC-source-20261102-release.zip` | Java/Spark implementation, build and launch scripts, regression tests, and five-point example (source archive) |
+| `supplementary/DiSMC-supplementary-20261110.pdf` | Supplementary experimental protocols, detailed measurements, and correctness arguments |
 | `docs/REPRODUCIBILITY.md` | Environment requirements, building, checks, and execution notes |
 | `docs/EXPERIMENT_INDEX.md` | Guide to the main-paper experimental results |
 | `data/README.md` | Dataset provenance and preparation protocol |
