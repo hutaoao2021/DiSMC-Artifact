@@ -21,6 +21,8 @@
 
 **Pre-publication PDF wording check (2026-11-11):** The currently uploaded supplementary PDF still names historical internal artifact directories as if they were included in this repository. A minimally revised 18-page PDF has been prepared separately to clarify that these historical records and snapshots are not bundled. **Do not switch to Public or claim the replacement is uploaded until the new PDF replaces the old one and the SHA-256 values in this document and supplementary/README.md are updated.**
 
+ The minimally revised replacement PDF is **18 pages**, and its SHA-256 is `463e60e17089b08b6369d6164058908e4c647591edd8275c7f16c9a24ce9fa6f` (prepared locally, **not uploaded**). Replace the existing `supplementary/DiSMC-supplementary-20261110.pdf` with these bytes, then refresh that file's checksum in this checklist and `supplementary/README.md`.
+
 ## Validate before release
 
 1. **Completed:** both core binaries are present, and Git blob SHA-1 values match locally verified bytes. For an independent end-to-end check, download each file from GitHub and compare SHA-256 with this checklist.
