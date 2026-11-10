@@ -1,0 +1,21 @@
+# Generated Java and Spark outputs
+target/
+*.class
+*.jar
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# Generated runtime outputs
+*.manifest
+*.observation.json
+*.spark_tasks.csv
+*.local_tasks.csv
+
+# Local datasets and cluster-specific files
+data/raw/
+data/processed/
+.env
+*.key
+*.pem
