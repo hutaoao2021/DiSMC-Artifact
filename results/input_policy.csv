@@ -1,0 +1,7 @@
+dataset,prepared_points,base_radius_m,radius_multiplier,full_parent_median_e2e_s,dependency_median_e2e_s,relative_e2e_reduction_percent,trials,record_budget_fraction,scope
+GeoLife,2000000,20,0.75,76.937,67.976,11.65,3,0.05,matched_acquisition_online_e2e_median
+GeoLife,2000000,20,1,110.397,104.668,5.19,3,0.05,matched_acquisition_online_e2e_median
+GeoLife,2000000,20,1.5,226.947,193.276,14.84,3,0.05,matched_acquisition_online_e2e_median
+TDrive,3000000,75,0.75,64.548,59.374,8.02,3,0.05,matched_acquisition_online_e2e_median
+TDrive,3000000,75,1,79.650,72.788,8.62,3,0.05,matched_acquisition_online_e2e_median
+TDrive,3000000,75,1.5,200.398,172.427,13.96,3,0.05,matched_acquisition_online_e2e_median
