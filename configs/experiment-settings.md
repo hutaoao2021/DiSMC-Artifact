@@ -12,6 +12,12 @@
 - The budget counts **additional task-input record assignments relative to the initial owner input population** (`B = floor(fraction × R0)`). It is not a network-byte or peak-RAM budget.
 - Do **not** assume all runs used 5%: full-data runs used **10%**, while selected frozen-state controls use a fixed acquired plan.
 
+## Reading this experiment index
+
+The matrix below also serves as the manuscript's figure/table navigation index. **Overall efficiency:** Fig. 4 (same-resource DiSMC vs Static-Greedy), Fig. 5 (stage decomposition of those same runs), and Fig. 6–8 (distributed comparators, spatial-position robustness, and single-threaded ESMC scale-out). **Scalability and full data:** Fig. 9 and Table I. **Mechanism studies:** Fig. 10 (input organization), Fig. 11 (calibration and frozen-state selector replay), Fig. 12 (matched work signals), and Fig. 13–14 (probe-reuse E2E and task-level computation). This index describes *reported measurements*, not fresh reruns.
+
+**Interpretation:** complete online E2E, fixed-state replay, and component-only measurements use different accounting boundaries; additional task-input record assignments are not network bytes or time. Budget fractions must be read from each experiment, not assumed to be globally 5%.
+
 ## Main-paper figure/table matrix
 
 | Paper | Dataset / prepared points | Query and radius | Budget | Measurement / extra control | Command status |
@@ -30,7 +36,7 @@
 | Fig. 13 | Frozen GeoLife/TDrive inputs | q=(15,15), fixed query | Frozen | Four (R,W) reuse combinations; three-run E2E means | Requires identical responsibility/input/probe IDs across arms |
 | Fig. 14 | Same frozen inputs as Fig. 13 | Same query | Frozen | Task-summed formal generation/counting checks from Fig. 13's runs | **No new execution**; derive from Fig. 13 task records |
 
-The supplementary document additionally reports input policy, query-position robustness, counting resolution (λ=0.5/1/2/4), parameter sensitivity, selector diagnostics, and the original ESMC datasets. See [the experiment index](../docs/EXPERIMENT_INDEX.md).
+The [supplementary PDF](../supplementary/DiSMC-supplementary-20261110.pdf) additionally reports input policy, query-position robustness, counting resolution (λ=0.5/1/2/4), parameter sensitivity, selector diagnostics, and original ESMC datasets.
 
 ## Distinct 2026-11-10 Table IX fixed-responsibility diagnostic
 
@@ -48,7 +54,7 @@ This is **not** Fig. 10's three-run Full-vs-Dependency E2E experiment.
 | Matched Full-parent *computed* charge | 308,095 | 983,097 |
 | Dependency *observed* charge | 174,393 | 259,343 |
 
-Only the Dependency plan was executed; the infeasible Full-parent alternative was **not** timed. Charges and hashes are captured in the provided raw-record ZIP. In the original commands, the historical source build and environment paths must be replaced before running the integrated release.
+Only the Dependency plan was executed; the infeasible Full-parent alternative was **not** timed. Fees were checked against author-provided per-owner records during manuscript preparation; the separate raw-record ZIP is not part of the streamlined public repository. Historical build settings and prepared inputs are still needed for an exact rerun.
 
 ## Limits of this registry
 
