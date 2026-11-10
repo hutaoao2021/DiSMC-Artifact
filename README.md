@@ -18,8 +18,8 @@ This repository is being prepared for the DiSMC research-paper artifact. The imp
 | [`configs/experiment-settings.md`](configs/experiment-settings.md) | Paper-specific workload, budget, query and measurement registry |
 | [`configs/run-commands.md`](configs/run-commands.md) | Source-backed launcher syntax, templates and known configuration limitations |
 | [`configs/fixed-query-coordinates.csv`](configs/fixed-query-coordinates.csv) | Eight fixed online queries, positional controls and full-data coordinates |
-| [`results/README.md`](results/README.md) | Paper-reported result CSVs, Table IX record provenance and interpretation limits |
-| [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | Final binary upload paths, hashes and public-access verification checklist |
+| [`results/README.md`](results/README.md) | Paper-reported aggregate results and their interpretation limits |
+| [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) | Two required binary upload paths, checksums and public-access verification checklist |
 | [`data/README.md`](data/README.md) | Dataset sources, input preparation and redistribution limitations |
 
 ## Quick start
