@@ -1,13 +1,13 @@
 # Implementation archive
 
-Expected file: `DiSMC-source-20261102-release.zip`.
+**Intended file:** `artifact/DiSMC-source-20261102-release.zip` (**not uploaded yet**).
 
-The source archive is based on the 2026-11-02 integrated DiSMC Java/Spark release. It contains the application sources, Maven project, regression tests, build/launch scripts and a five-point synthetic fixture.
+The ZIP contains the integrated `DiSMC-source/` Maven/Java project, scripts, selected regression tests and a five-point synthetic fixture. Production Java sources are unchanged from the 2026-11-02 integrated release; packaging work adjusted shell portability and documentation.
 
-The release package leaves Java production and test sources unchanged while making the launcher environment configuration portable. `PUBLIC_PACKAGING_NOTES.md` inside the archive documents the packaging step.
+To publish the prepared Stage-1 ZIP, rename it to `DiSMC-source-20261102-release.zip` before uploading it to this directory.
 
-**Reproducible input:** JDK 8; Spark 3.2.0 (Scala 2.12). See [the guide](../docs/REPRODUCIBILITY.md) for test and launch commands.
+**Expected SHA-256 after that rename** (hash of the prepared Stage-1 archive):
 
-**Archive SHA-256:** `ac5b75689b3454a9e3c38ca986c311933cad4f5f5e9ff1595c6dfaccb75da047`
+`40171c00e8c1d92c543560e084e9646897336ec7bff2c3d856f57a57d2e7c92e`
 
-Download the ZIP and extract before running the build.
+This checksum is for the *prepared file*, not proof that it has already been uploaded. See [installation](../docs/INSTALL.md) and [reproducibility](../docs/REPRODUCIBILITY.md).
