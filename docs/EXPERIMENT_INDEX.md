@@ -17,6 +17,10 @@ This file points to the primary experimental categories in the DiSMC manuscript.
 | Fig. 13 | Probe reuse | Complete online E2E of four reuse settings |
 | Fig. 14 | Probe reuse | Formal task candidate-generation/counting checks |
 
+**Execution and parameter details:** [experiment settings](../configs/experiment-settings.md), [run commands](../configs/run-commands.md), and [fixed query coordinates](../configs/fixed-query-coordinates.csv).
+
+The current integrated release cannot directly use a 10% budget in its Micro-Partition configuration-validation path; do not represent the Table I full-data protocol as a directly runnable 5%-to-10% parameter substitution. State-dependent selector and reuse controls likewise need matching frozen inputs. See the linked command guide.
+
 ## Reading the supplementary tables
 
 The supplementary technical document provides dataset preparation notes, precise controls, additional quantitative summaries and proof details.
