@@ -1,0 +1,17 @@
+dataset,query,prepared_points,radius_m,method,trials,mean_e2e_s,sample_sd_s,scope,record_budget_fraction
+GeoLife,q20,3000000,100,DiSMC,3,1420.252,72.362,complete_online_e2e,0.05
+GeoLife,q20,3000000,100,Static-Greedy,3,2884.073,507.864,complete_online_e2e,0.05
+GeoLife,q40,3000000,100,DiSMC,3,1312.631,83.379,complete_online_e2e,0.05
+GeoLife,q40,3000000,100,Static-Greedy,3,3232.610,187.563,complete_online_e2e,0.05
+GeoLife,q60,3000000,100,DiSMC,3,1000.158,141.715,complete_online_e2e,0.05
+GeoLife,q60,3000000,100,Static-Greedy,3,2544.110,165.397,complete_online_e2e,0.05
+GeoLife,q80,3000000,100,DiSMC,3,1190.935,125.618,complete_online_e2e,0.05
+GeoLife,q80,3000000,100,Static-Greedy,3,1846.305,261.438,complete_online_e2e,0.05
+TDrive,q20,3000000,300,DiSMC,3,511.974,10.510,complete_online_e2e,0.05
+TDrive,q20,3000000,300,Static-Greedy,3,859.738,10.797,complete_online_e2e,0.05
+TDrive,q40,3000000,300,DiSMC,3,408.719,27.636,complete_online_e2e,0.05
+TDrive,q40,3000000,300,Static-Greedy,3,822.669,24.273,complete_online_e2e,0.05
+TDrive,q60,3000000,300,DiSMC,3,422.884,45.541,complete_online_e2e,0.05
+TDrive,q60,3000000,300,Static-Greedy,3,856.135,25.956,complete_online_e2e,0.05
+TDrive,q80,3000000,300,DiSMC,3,518.346,41.508,complete_online_e2e,0.05
+TDrive,q80,3000000,300,Static-Greedy,3,793.458,21.848,complete_online_e2e,0.05
