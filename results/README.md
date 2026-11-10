@@ -1,6 +1,6 @@
 # DiSMC experimental results
 
-This directory publishes **machine-readable paper-reported aggregates** and a traceable reference to the **2026-11-10 Table IX raw-record package**. The CSVs are transcriptions of the final manuscript/supplementary numerical arrays and plotting data. **They are not newly rerun Spark results**, nor do they replace full raw per-trial logs.
+This directory publishes **machine-readable paper-reported aggregate results** across the main evaluation. The CSVs are transcriptions of the final manuscript/supplementary numerical arrays and plotting data. **They are not newly rerun Spark results**, nor do they replace full raw per-trial logs.
 
 ## Data files and measurement meaning
 
@@ -12,7 +12,7 @@ This directory publishes **machine-readable paper-reported aggregates** and a tr
 | [`input_policy.csv`](input_policy.csv) | Main Fig. 10 / Supplement input-policy table | Full-parent vs Dependency at *matched acquisition/work/Engine*, 3-run **medians**. Different selected plans are allowed. |
 | [`full_data.csv`](full_data.csv) | Main Table I | Complete-output GeoLife/TDrive **10% cap** runs, 3-run **mean and sample SD** |
 | [`table_ix_5pct.csv`](table_ix_5pct.csv) | Supplement **Table IX** | Distinct **5% fixed-responsibility budget-feasibility diagnostic** from raw records, not the Fig. 10 E2E comparison |
-| [`table_ix_5pct/README.md`](table_ix_5pct/README.md) | Supplement Table IX | Source ZIP checksum, verification formulas, run scope and pending full raw archive |
+| [`table_ix_5pct/README.md`](table_ix_5pct/README.md) | Supplement Table IX | Optional verification note for the supplementary budget diagnostic; no standalone evidence ZIP is required |
 
 For the complete experiment matrix, see [`configs/experiment-settings.md`](../configs/experiment-settings.md) and the [experiment index](../docs/EXPERIMENT_INDEX.md). The final 18-page supplementary PDF has additional tables and the definitions of controls not transcribed as separate CSVs here. **Not every figure is represented by a standalone numeric CSV**, and CSV presence must not be interpreted as full raw-log availability.
 
@@ -29,10 +29,10 @@ For the complete experiment matrix, see [`configs/experiment-settings.md`](../co
 ## What is and is not verified
 
 - The numeric values in the CSVs are matched to the **final manuscript/source plotting arrays** and the supplement.
-- Table IX's supplied ZIP includes per-owner fee records, manifests, plan/task data, commands, logs and a hash/fee verification script. Its key results were independently recomputed against the supplied records during manuscript preparation.
+- The reported supplementary Table IX charges were checked separately using author-provided per-owner records during manuscript preparation. A raw-record ZIP is **not** a required release deliverable.
 - We have **not** independently executed the entire large-scale Spark experiment suite or acquired all original dataset hashes as part of this release preparation.
-- The binary Table IX record ZIP and the final supplementary PDF are **pending repository upload**. Until those files are present, do not label them "downloadable" in public documentation.
+- The main source ZIP and the final supplementary PDF are **pending repository upload**. Until those files are present, do not label them "downloadable" in public documentation.
 
 ## Validation guide
 
-To check the published CSV scopes, compare each row with the figure/table caption and the [configuration registry](../configs/experiment-settings.md). For the Table IX raw-record verifier and expected charges, see [Table IX](table_ix_5pct/README.md). For launching a fresh run, see [source-backed commands](../configs/run-commands.md); the smoke test is a functionality check, not a performance reproduction.
+To check the published CSV scopes, compare each row with the figure/table caption and the [configuration registry](../configs/experiment-settings.md). For the supplementary Table IX metric boundary, see [the short verification note](table_ix_5pct/README.md). For launching a fresh run, see [source-backed commands](../configs/run-commands.md); the smoke test is a functionality check, not a performance reproduction.
