@@ -8,4 +8,4 @@ The **18-page** supplementary technical document provides protocols, extended ex
 - **SHA-256:** `463e60e17089b08b6369d6164058908e4c647591edd8275c7f16c9a24ce9fa6f`
 - **Git blob SHA-1 (uploaded content):** `fd30a699df366789667a90bea02834717adf5a00`
 
-The Git blob identifier agrees with the locally SHA-256-checked prepared PDF. The repository is still **Private**; anonymous access is not yet confirmed.
+The Git blob identifier agrees with the locally SHA-256-checked prepared PDF. The repository is **Public**; independent signed-out download verification is a separate final check.
