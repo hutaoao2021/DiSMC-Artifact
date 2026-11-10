@@ -10,8 +10,8 @@ This repository collects the DiSMC research-paper artifact. The implementation i
 
 | Path | Purpose |
 | --- | --- |
-| `artifact/DiSMC-source-20261102-release.zip` | Integrated Java/Spark source, tests, launch scripts, and five-point fixture (**uploaded; checksum verified**) |
-| `supplementary/DiSMC-supplementary-20261110.pdf` | Final supplementary technical document (**uploaded; checksum verified**) |
+| [`artifact/DiSMC-source-20261102-release.zip`](artifact/DiSMC-source-20261102-release.zip) | Integrated Java/Spark source, tests, launch scripts, and five-point fixture (**uploaded; checksum verified**) |
+| [`supplementary/DiSMC-supplementary-20261110.pdf`](supplementary/DiSMC-supplementary-20261110.pdf) | Final supplementary technical document (**uploaded; checksum verified**) |
 | [`docs/INSTALL.md`](docs/INSTALL.md) | Software requirements, compilation, selected regression checks, and smoke test |
 | [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Execution modes, configuration boundaries, provenance and validation scope |
 | [`docs/EXPERIMENT_INDEX.md`](docs/EXPERIMENT_INDEX.md) | Navigation from paper figures and tables to experiment categories |
