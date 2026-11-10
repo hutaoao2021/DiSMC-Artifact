@@ -1,11 +1,11 @@
 # Supplementary technical document
 
-**Available file:** [`DiSMC-supplementary-20261110.pdf`](DiSMC-supplementary-20261110.pdf) (**uploaded; Git blob verified**).
+**Available final PDF:** [`DiSMC-supplementary-20261110.pdf`](DiSMC-supplementary-20261110.pdf)
 
-The final 18-page PDF contains additional protocols, detailed experimental measurements, and correctness arguments for *DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries*.
+The **18-page** supplementary technical document provides protocols, extended experimental results, and correctness arguments for *DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries*. This updated edition clarifies references to historical internal artifact paths; it does not add historical snapshots or raw logs to the current repository.
 
-**SHA-256 (locally verified copy):**
+- **File size:** 356142 bytes
+- **SHA-256:** `463e60e17089b08b6369d6164058908e4c647591edd8275c7f16c9a24ce9fa6f`
+- **Git blob SHA-1 (uploaded content):** `fd30a699df366789667a90bea02834717adf5a00`
 
-`a4f92431326f58ddcebf7d4097c66b6923ab7268c3c809246f697ae6b7fc5c6f`
-
-The uploaded Git blob SHA-1 matches the prepared PDF: `61c7db74ced2a3693c01010c89cc0b7bc9c3b927`. The repository remains Private.
+The Git blob identifier agrees with the locally SHA-256-checked prepared PDF. The repository is still **Private**; anonymous access is not yet confirmed.
