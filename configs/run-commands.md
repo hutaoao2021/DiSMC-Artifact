@@ -4,7 +4,7 @@
 
 ## 0. Prepare environment and source
 
-The release ZIP must first be uploaded/extracted. From the top-level repository directory:
+The release ZIP is already available in this repository. Extract it from the top-level repository directory:
 
 ```bash
 unzip artifact/DiSMC-source-20261102-release.zip
@@ -121,7 +121,7 @@ bash scripts/run_profile.sh hilbert_full \
   --conf spark.locality.wait=0s
 ```
 
-Run with GeoLife 2M, radius **20**, or TDrive 3M, radius **75**, both q=(15,15), to match the visible *workload description* for Table IX. **Matching the measured charge numbers also requires the full original acquisition/refinement parameters and prepared inputs.** Do not interpret this fragment alone as an exact Table IX reproduction. Original captured commands and cost records belong with the results artifact stage.
+Run with GeoLife 2M, radius **20**, or TDrive 3M, radius **75**, both q=(15,15), to match the visible *workload description* for Table IX. **Matching the measured charge numbers also requires the full original acquisition/refinement parameters and prepared inputs.** Do not interpret this fragment alone as an exact Table IX reproduction. The original per-owner records were used for manuscript verification, but are not required as a standalone public bundle.
 
 ## 6. Other mechanism settings
 
