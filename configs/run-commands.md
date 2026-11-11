@@ -141,3 +141,7 @@ Main Table I and supplementary full-data protocols used **10%** extra-input assi
 Use distinct outputs and record: dataset name and *prepared input hash*, subset seed/count, code/JAR SHA-256, profile, q, r, k, partitions/owners, all `--conf` options, core/memory requests, run ID, E2E definition and trial repetitions. The launcher writes an adjacent `.manifest` only after successful return. Do not treat a generated manifest as proof of result correctness.
 
 See [experiment settings](experiment-settings.md), [query coordinates](fixed-query-coordinates.csv), and the supplementary PDF for the original measurement definitions.
+
+## Historical commands versus the templates above
+
+See the [historical command index](historical-command-index.csv) and [coverage report](../docs/HISTORICAL-EVIDENCE.md) for recovered argv/environment records and explicit gaps. Templates are not retrospective evidence. The separately named [10% candidate](../docs/BUDGET10-VALIDATION.md) permits Micro-Partition 10% only with `spark.skyline.budgetDiagnostic=true`; the 2026-11-02 ZIP is retained.

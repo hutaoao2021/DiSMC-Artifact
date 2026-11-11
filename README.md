@@ -57,3 +57,12 @@ The repository does not redistribute third-party GeoLife or TDrive raw datasets.
 ## Citation
 
 *DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries.*
+
+## Recovered provenance and validated budget candidate (2026-11-11)
+
+- [Historical evidence coverage](docs/HISTORICAL-EVIDENCE.md): distinguishes exact figure bindings, antecedent runs and missing records.
+- [Recovered historical preprocessing](data/historical/README.md), separate from the later reference converter.
+- [119-record command index](configs/historical-command-index.csv) and [Fig. 4 per-trial times](results/online_fixed_queries_per_trial.csv).
+- [Opt-in 10% validation](docs/BUDGET10-VALIDATION.md) and [separate tested candidate source ZIP](artifact/DiSMC-source-20261111-budget10-validated.zip). The original formal ZIP is retained unchanged.
+
+Run `python3 tools/check_recovered_evidence.py` to check distributed hashes and aggregate arithmetic. This is distinct from executing the historical benchmark suite.

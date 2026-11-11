@@ -34,3 +34,7 @@ For the complete experiment matrix and manuscript figure index, see [experimenta
 ## Validation guide
 
 To check the published CSV scopes, compare each row with the figure/table caption and the [configuration registry](../configs/experiment-settings.md). Table IX is documented in the [supplementary PDF](../supplementary/DiSMC-supplementary-20261110.pdf), without a separate standalone evidence bundle. For launching a fresh run, see [source-backed commands](../configs/run-commands.md); the smoke test is a functionality check, not a performance reproduction.
+
+## Recovered trial evidence (2026-11-11)
+
+[online_fixed_queries_per_trial.csv](online_fixed_queries_per_trial.csv) now supplies all 48 Fig. 4 times recovered from historical result manifests, tied to recorded commands/input/JAR hashes. `tools/check_recovered_evidence.py` verifies their means and sample SD against the existing aggregate CSV. This addition does not establish missing final 5% mechanism-run bindings; see [coverage](../docs/HISTORICAL-EVIDENCE.md). Earlier result files and aggregates are retained.

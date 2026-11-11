@@ -1,0 +1,36 @@
+{
+  "datasets": {
+    "geolife": {
+      "base_line_count": 3000000,
+      "large_line_count": 8000000,
+      "large_sha256": "e5abf9e5c54b5ac2ff1eca42df04bcdc26bd0fbc4bda8016dcbe340396925df8",
+      "medium_line_count": 5000000,
+      "medium_sha256": "da744643258b7ea23cd5ea7a0cdb123293197aa5477b4785612586f17e9df223",
+      "seed": 20260924,
+      "source_line_count": 18355282,
+      "source_sha256": "44f2e5dee84b14bfd1a59a56226717137da355d057c81913522e93e197d755c4"
+    },
+    "porto": {
+      "base_line_count": 3000000,
+      "large_line_count": 8000000,
+      "large_sha256": "be3715be931ab0e2c1b6098af6d3ea5ec790ae0e1f45b2a7ff48eb4cbbb6eb73",
+      "medium_line_count": 5000000,
+      "medium_sha256": "cd9996b928a1f9267361a541efb95729b3c7e34ee84bab71f1bdb22d1497e19f",
+      "seed": 20260924,
+      "source_line_count": 17565472,
+      "source_sha256": "6dcd783e15070483319ea3809cfcd19eeb0c47190e9433f9953e9d52ba3bd574"
+    },
+    "tdrive": {
+      "base_line_count": 3000000,
+      "large_line_count": 8000000,
+      "large_sha256": "6a67d8016a55a730350e7ca120c449b78f893ed5d7a37f6aa4f3f94148680ebb",
+      "medium_line_count": 5000000,
+      "medium_sha256": "93c2e11c06cbea02d594daafb4eab2016a69a6792859abf38410a77f50b7aefe",
+      "seed": 20260924,
+      "source_line_count": 11274655,
+      "source_sha256": "92b15d34e40b5c87b799db29220e45c0d4fd448f92d53555082fc639af5834f2"
+    }
+  },
+  "method": "fixed-seed reservoir extension of the existing 3M subset",
+  "seed": 20260924
+}

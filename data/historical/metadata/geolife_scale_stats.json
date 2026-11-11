@@ -1,0 +1,9 @@
+{
+  "seed": 20260925,
+  "source_line_count": 18355282,
+  "source_sha256": "44f2e5dee84b14bfd1a59a56226717137da355d057c81913522e93e197d755c4",
+  "small_line_count": 1000000,
+  "small_sha256": "37fe5ebe259c73ecff9200f66296157f326c5ef3239f8dc28308da6800fc175d",
+  "large_line_count": 3000000,
+  "large_sha256": "b21b972f83329b39cca4870b95b775dad7e18a7ca2b82e445cb83598637f70c9"
+}

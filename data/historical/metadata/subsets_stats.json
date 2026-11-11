@@ -1,0 +1,24 @@
+{
+  "datasets": {
+    "porto": {
+      "large_line_count": 3000000,
+      "large_sha256": "5223a09b19cc6ca61fe779bead3fd5c74273cc6aa1ab92008be32a60f74ee442",
+      "seed": 20260924,
+      "small_line_count": 1000000,
+      "small_sha256": "b8d143ed872e0eecf6f89e90bb53bac37bff4ced842d16658d6fde8a4d6e3e81",
+      "source_line_count": 17565472,
+      "source_sha256": "6dcd783e15070483319ea3809cfcd19eeb0c47190e9433f9953e9d52ba3bd574"
+    },
+    "tdrive": {
+      "large_line_count": 3000000,
+      "large_sha256": "4c7c86cf9f1d4d81f8302921e61e77b352bd43623fb39b0c9196e0c8c4c7a9cb",
+      "seed": 20260924,
+      "small_line_count": 1000000,
+      "small_sha256": "bc42a32ce19d64b0ab5b94486681ae975e06028a489de7e29703e554f653ba76",
+      "source_line_count": 11274655,
+      "source_sha256": "92b15d34e40b5c87b799db29220e45c0d4fd448f92d53555082fc639af5834f2"
+    }
+  },
+  "method": "fixed-seed reservoir sampling; 1M is nested within 3M",
+  "seed": 20260924
+}

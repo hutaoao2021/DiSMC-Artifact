@@ -103,3 +103,7 @@ Paper query coordinates are listed in [`configs/fixed-query-coordinates.csv`](..
 - The released integrated Java source lacks the historical dataset preprocessing scripts, raw input hashes and fixed historical reservoir ordering. Therefore, newly generated files are **valid inputs**, not byte-identical copies of the paper's historical inputs.
 - Original source/download links and prepared-input hashes for **NE/CAS/TS** are not established from the provided material. If the original ESMC inputs are already available, use their existing whitespace-separated planar `x y` files; do not run the Beijing/Porto geographic projection.
 - No private trajectory logs, usernames, server paths or third-party raw data should be committed to the repository.
+
+## Recovered historical pipeline
+
+The original experiment parser/subset scripts and processing metadata have now been recovered: see [historical preprocessing](historical/README.md). `prepare_trajectories.py` above remains a later reference converter; it is not substituted for those scripts or claimed byte-identical.

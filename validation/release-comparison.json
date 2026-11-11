@@ -1,0 +1,9 @@
+{
+  "original_formal_sha256": "40171c00e8c1d92c543560e084e9646897336ec7bff2c3d856f57a57d2e7c92e",
+  "new_candidate_sha256": "30b75c4d83a1c1ff0f1b68e73a1e93995c99ffb42b5b69713e85d670d1735ed5",
+  "base_commit": "80865ebcd5d974e4cd9710b0bc86caf0ba27a690",
+  "branch": "codex/artifact-provenance-budget-validation",
+  "original_formal_unchanged": true,
+  "visibility_changed": false,
+  "historical_results_modified": false
+}
