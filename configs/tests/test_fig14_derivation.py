@@ -22,11 +22,11 @@ class Fig14DerivationTest(unittest.TestCase):
                             )
                             with path.open("w",newline="") as f:
                                 writer = csv.writer(f)
-                                writer.writerow(["stage_id","partition_id",
+                                writer.writerow(["stage_id","partition_id","owner","lane",
                                                  "candidate_count","z_window_checks",
                                                  "distance_checks"])
-                                writer.writerow([1,0,4,10,30])
-                                writer.writerow([1,1,3,5,50])
+                                writer.writerow([1,0,2,0,4,10,30])
+                                writer.writerow([1,0,2,1,3,5,50])
             dest = root / "fig14.csv"
             self.assertEqual(24, derive(data,dest))
             with dest.open(newline="") as f:

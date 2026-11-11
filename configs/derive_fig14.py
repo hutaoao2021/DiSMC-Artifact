@@ -20,14 +20,14 @@ COLUMNS = ("candidate_count", "z_window_checks", "distance_checks")
 def read_trial(path):
     with path.open(newline="", encoding="utf-8") as stream:
         reader = csv.DictReader(stream)
-        mandatory = set(COLUMNS) | {"stage_id", "partition_id"}
+        mandatory = set(COLUMNS) | {"stage_id", "partition_id", "owner", "lane"}
         if not mandatory.issubset(reader.fieldnames or ()):
             raise ValueError("Missing task counters in {}".format(path))
         totals = dict.fromkeys(COLUMNS, 0)
         identity = set()
         seen = 0
         for record in reader:
-            key = (record["stage_id"], record["partition_id"])
+            key = (record["stage_id"], record["partition_id"], record["owner"], record["lane"])
             if key in identity:
                 raise ValueError("Duplicate Spark task attempt in {}; refuse double count".format(path))
             identity.add(key)
@@ -71,14 +71,14 @@ def derive(directory, output):
             raise ValueError("{} missing Fig. 13 combinations: {}".format(ds, have))
     if output.exists():
         raise FileExistsError("Refusing to overwrite: {}".format(output))
+    mean_path = output.with_name(output.stem + "_means.csv")
+    if mean_path.exists():
+        raise FileExistsError("Refusing to overwrite: {}".format(mean_path))
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("x", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(matches[0]))
         writer.writeheader()
         writer.writerows(matches)
-    mean_path = output.with_name(output.stem + "_means.csv")
-    if mean_path.exists():
-        raise FileExistsError("Refusing to overwrite: {}".format(mean_path))
     with mean_path.open("x", newline="", encoding="utf-8") as stream:
         columns = ("dataset","R","W","trials","candidate_count_mean",
                    "generation_z_window_checks_mean",
