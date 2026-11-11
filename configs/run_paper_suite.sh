@@ -6,6 +6,8 @@ SRC=${SOURCE_DIR:-"$ROOT/DiSMC-source"}
 DATA_DIR=${DATA_DIR:-"$ROOT/data/historical"}
 OUT_DIR=${OUT_DIR:-"$ROOT/results/paper-rerun"}
 TRIALS=${TRIALS:-1}; DRY_RUN=${DRY_RUN:-0}
+# Heavy complete-query paper controls use an 8 GiB driver.
+export DRIVER_MEMORY=${DRIVER_MEMORY:-8G}
 if [[ -z "$FIG" || "$FIG" == "--help" ]]; then
   echo "Usage: DATA_DIR=/data OUT_DIR=/results TRIALS=3 bash configs/run_paper_suite.sh {fig4|fig5|fig6|fig7|fig8|fig9|table1|fig10|fig11a|fig12}"
   echo "Use DRY_RUN=1 to print commands. Source ZIP must be extracted and built."
@@ -101,7 +103,7 @@ run_one() {
     cmd+=(-- --conf spark.locality.wait=0s)
   fi
   if [[ "$DRY_RUN" == 1 ]]; then
-    printf 'QUERY_X=%q QUERY_Y=%q TOTAL_EXECUTOR_CORES=%q ' "$x" "$y" "${TOTAL_EXECUTOR_CORES:-40}"
+    printf 'QUERY_X=%q QUERY_Y=%q TOTAL_EXECUTOR_CORES=%q DRIVER_MEMORY=%q ' "$x" "$y" "${TOTAL_EXECUTOR_CORES:-40}" "$DRIVER_MEMORY"
     printf '%q ' "${cmd[@]}"; echo
   elif [[ "$profile" == single_esmc ]]; then
     QUERY_X="$x" QUERY_Y="$y" JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:-} -Xmx4g" timeout 7200s "${cmd[@]}"
@@ -124,6 +126,7 @@ for ((TRIAL=1;TRIAL<=TRIALS;TRIAL++)); do
       ;;
     fig5) echo "Fig. 5 uses Fig. 4 stage metrics; no additional execution"; exit 0 ;;
     fig6)
+      echo "NOTE: Assembled spatial-operator baseline is not in run_profile.sh; this is a partial suite." >&2
       for spec in "geolife 1m 20" "tdrive 3m 75"; do
         read -r ds size radius <<< "$spec"
         for method in dismc grid_d0 hilbert_d0 z_d0; do
@@ -133,6 +136,7 @@ for ((TRIAL=1;TRIAL<=TRIALS;TRIAL++)); do
       echo "Assembled spatial-operator baseline needs its separate entry point." >&2
       ;;
     fig7)
+      echo "NOTE: Assembled spatial-operator baseline is not in run_profile.sh; this covers DiSMC only." >&2
       for spec in \
         "geolife sparse 121585.662 102389.276 20" "geolife medium 122287.250 105282.863 20" \
         "geolife dense 114693.645 108474.258 20" "tdrive sparse 120924.613 114579.245 75" \
@@ -181,12 +185,13 @@ for ((TRIAL=1;TRIAL<=TRIALS;TRIAL++)); do
         if [[ "$ds" == geolife ]]; then size=2m; x=$MEDIUM_GEOLIFE_X; y=$MEDIUM_GEOLIFE_Y; radius=40
         else size=3m; x=$MEDIUM_TDRIVE_X; y=$MEDIUM_TDRIVE_Y; radius=150; fi
         for paired in false true; do
-          REFRESH=false LANE=true PARENT_REPLAY="$paired" PROBE_OWNER_LIMIT=8 ACQUISITION_OWNER_LIMIT=8 \
+          REFRESH=true LANE=true PARENT_REPLAY="$paired" PROBE_OWNER_LIMIT=8 ACQUISITION_OWNER_LIMIT=8 \
             run_one fig11a "$ds" "$size" "paired${paired}" "$x" "$y" "$radius" dismc
         done
       done
       ;;
     fig12)
+      echo "NOTE: Independent signal runs; paper Fig. 12 matched-information requires fixed acquired candidates/probe identities, not supplied by this command." >&2
       for ds in geolife tdrive; do
         if [[ "$ds" == geolife ]]; then size=2m; x=$MEDIUM_GEOLIFE_X; y=$MEDIUM_GEOLIFE_Y; radius=40
         else size=3m; x=$MEDIUM_TDRIVE_X; y=$MEDIUM_TDRIVE_Y; radius=150; fi
