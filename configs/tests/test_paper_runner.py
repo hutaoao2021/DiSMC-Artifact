@@ -89,10 +89,10 @@ class PaperCommandMatrixTest(unittest.TestCase):
             self.assertEqual("true", conf["spark.skyline.microLaneProbeRefinement"])
             self.assertEqual("sampled", conf["spark.skyline.experiment.microCostSignal"])
 
-    def test_fig12_correctly_warns_not_matched_information(self):
+    def test_fig12_work_signal_modes(self):
         rows, log = dry_run("fig12")
         self.assertEqual(18, len(rows))
-        self.assertIn("paper Fig. 12 matched-information", log)
+        self.assertIn("Fig. 12: Unit / Static / Sampled", log)
         self.assertEqual(
             {"unit", "static", "sampled"},
             {conf["spark.skyline.experiment.microCostSignal"] for _, _, conf in rows}
