@@ -9,7 +9,7 @@ TRIALS=${TRIALS:-1}; DRY_RUN=${DRY_RUN:-0}
 # Heavy complete-query paper controls use an 8 GiB driver.
 export DRIVER_MEMORY=${DRIVER_MEMORY:-8G}
 if [[ -z "$FIG" || "$FIG" == "--help" ]]; then
-  echo "Usage: DATA_DIR=/data OUT_DIR=/results TRIALS=3 bash configs/run_paper_suite.sh {fig4|fig5|fig6|fig7|fig8|fig9|table1|fig10|fig11a|fig12}"
+  echo "Usage: DATA_DIR=/data OUT_DIR=/results TRIALS=3 bash configs/run_paper_suite.sh {fig4|fig5|fig6|fig7|fig8|fig9|table1|fig10|fig11a|fig11b|fig12|fig13|fig14}"
   echo "Use DRY_RUN=1 to print commands. Source ZIP must be extracted and built."
   exit 0
 fi
@@ -40,6 +40,16 @@ run_one() {
   fi
   profile=$method
   [[ "$method" == dismc || "$method" == static ]] && profile=hilbert_full
+  if [[ "$method" == operator ]]; then
+    local -a op=(bash "$ROOT/configs/run_spatial_operator.sh" "$input" "$output" 200 "$radius" 2 "$x" "$y")
+    if [[ "$DRY_RUN" == 1 ]]; then
+      printf 'QUERY_X=%q QUERY_Y=%q TOTAL_EXECUTOR_CORES=%q DRIVER_MEMORY=%q ' "$x" "$y" "${TOTAL_EXECUTOR_CORES:-40}" "$DRIVER_MEMORY"
+      printf '%q ' "${op[@]}"; echo
+    else
+      "${op[@]}"
+    fi
+    return
+  fi
   local -a cmd=(bash "$SRC/scripts/run_profile.sh" "$profile" "$input" "$output" 200 "$radius" 2 1)
   if [[ "$profile" == hilbert_full ]]; then
     mode=${MODE:-dependency}; budget=${BUDGET:-0.05}; signal=${SIGNAL:-sampled}
@@ -47,8 +57,8 @@ run_one() {
       # Static-Greedy is not sampled_peak+work_greedy: it has no online probes.
       planner=peak; selector=work_greedy; frontier=false; lane=false; refresh=false; reuse=false
     else
-      planner=sampled_peak; selector=joint_peak; frontier=${FRONTIER:-true}
-      lane=${LANE:-true}; refresh=${REFRESH:-true}; reuse=true
+      planner=sampled_peak; selector=${SELECTOR:-joint_peak}; frontier=${FRONTIER:-true}
+      lane=${LANE:-true}; refresh=${REFRESH:-true}; reuse=${REUSE:-true}
     fi
     cmd+=(--
       --conf spark.skyline.experiment.enabled=true
@@ -99,6 +109,22 @@ run_one() {
       --conf spark.skyline.memberOutputMode=partitioned
       --conf spark.skyline.cacheMemberText=true
       --conf spark.locality.wait=0s)
+    # Replays use a single captured candidate/work/probe state, never new probes.
+    if [[ -n "${FROZEN_ACTION:-}" ]]; then
+      [[ -n "${FROZEN_INPUT_SHA:-}" ]] || { echo "Frozen execution needs source SHA-256" >&2; exit 2; }
+      cmd+=(--conf "spark.skyline.inputSha256=$FROZEN_INPUT_SHA"
+             --conf "spark.skyline.experiment.outputPrefix=$output")
+      if [[ "$FROZEN_ACTION" == capture ]]; then
+        cmd+=(--conf spark.skyline.microFrozenStateExport=true)
+      elif [[ "$FROZEN_ACTION" == load ]]; then
+        [[ -n "${FROZEN_STATE_PATH:-}" && -n "${FROZEN_STATE_SHA:-}" ]] || {
+          echo "Frozen load requires state path and SHA-256" >&2; exit 2; }
+        cmd+=(--conf "spark.skyline.microFrozenStateLoad=$FROZEN_STATE_PATH"
+               --conf "spark.skyline.microFrozenStateSha256=$FROZEN_STATE_SHA")
+      else
+        echo "Invalid FROZEN_ACTION=$FROZEN_ACTION" >&2; exit 2
+      fi
+    fi
   elif [[ "$profile" != single_esmc ]]; then
     cmd+=(-- --conf spark.locality.wait=0s)
   fi
@@ -111,6 +137,85 @@ run_one() {
     QUERY_X="$x" QUERY_Y="$y" "${cmd[@]}"
   fi
 }
+
+# Use the integrated frozen capture/load mechanism for controls that MUST
+# share acquired alternatives, work observations, probe IDs and task inputs.
+if [[ "$FIG" == fig11b || "$FIG" == fig13 ]]; then
+  for ds in geolife tdrive; do
+    if [[ "$FIG" == fig11b ]]; then
+      size=2m; radius=40
+      if [[ "$ds" == geolife ]]; then x=$MEDIUM_GEOLIFE_X; y=$MEDIUM_GEOLIFE_Y
+      else x=$MEDIUM_TDRIVE_X; y=$MEDIUM_TDRIVE_Y; fi
+    else
+      x=15; y=15
+      if [[ "$ds" == geolife ]]; then size=2m; radius=20
+      else size=3m; radius=75; fi
+    fi
+    flat="$DATA_DIR/${ds}_${size}_xy.txt"
+    nested="$DATA_DIR/subsets/${ds}_${size}_xy.txt"
+    input=$flat
+    [[ ! -f "$flat" && -f "$nested" ]] && input=$nested
+    if [[ "$DRY_RUN" == 1 ]]; then
+      input_sha=DRY_RUN_INPUT_SHA256
+    else
+      [[ -f "$input" ]] || { echo "Missing frozen input $input" >&2; exit 2; }
+      input_sha=$(sha256sum "$input" | awk '{print $1}')
+    fi
+    TRIAL=1
+    if [[ "$FIG" == fig13 ]]; then
+      # The supplement reports 192 completed anchors: bound the capture
+      # to eight owner probes with at most 24 anchors each, no added lane probes.
+      FROZEN_ACTION=capture FROZEN_INPUT_SHA="$input_sha" \
+        SELECTOR=joint_peak PROBE_OWNER_LIMIT=8 REFRESH=false LANE=false \
+        REUSE=true FRONTIER=true \
+        run_one "$FIG" "$ds" "$size" frozen_capture "$x" "$y" "$radius" dismc
+    else
+      FROZEN_ACTION=capture FROZEN_INPUT_SHA="$input_sha" \
+        SELECTOR=joint_peak REFRESH=true LANE=true REUSE=true FRONTIER=true \
+        run_one "$FIG" "$ds" "$size" frozen_capture "$x" "$y" "$radius" dismc
+    fi
+    state="$OUT_DIR/$FIG/${ds}_${size}_frozen_capture_dismc_trial1.txt.frozen_calibration.bin"
+    if [[ "$DRY_RUN" == 1 ]]; then state_sha=DRY_RUN_FROZEN_SHA256
+    else
+      [[ -f "$state" ]] || { echo "Frozen capture not created: $state" >&2; exit 2; }
+      state_sha=$(sha256sum "$state" | awk '{print $1}')
+    fi
+    for ((rep=1;rep<=TRIALS;rep++)); do
+      TRIAL=$rep
+      if [[ "$FIG" == fig11b ]]; then
+        for selector in joint_peak work_greedy; do
+          FROZEN_ACTION=load FROZEN_INPUT_SHA="$input_sha" \
+            FROZEN_STATE_PATH="$state" FROZEN_STATE_SHA="$state_sha" \
+            SELECTOR="$selector" REFRESH=false LANE=false REUSE=true FRONTIER=true \
+            run_one "$FIG" "$ds" "$size" "$selector" "$x" "$y" "$radius" dismc
+        done
+      else
+        for R in 0 1; do
+          for W in 0 1; do
+            reuse=false; frontier=false
+            [[ "$R" == 1 ]] && reuse=true
+            [[ "$W" == 1 ]] && frontier=true
+            FROZEN_ACTION=load FROZEN_INPUT_SHA="$input_sha" \
+              FROZEN_STATE_PATH="$state" FROZEN_STATE_SHA="$state_sha" \
+              SELECTOR=joint_peak REFRESH=false LANE=false \
+              REUSE="$reuse" FRONTIER="$frontier" \
+              run_one "$FIG" "$ds" "$size" "R${R}W${W}" "$x" "$y" "$radius" dismc
+          done
+        done
+      fi
+    done
+  done
+  exit 0
+fi
+if [[ "$FIG" == fig14 ]]; then
+  if [[ "$DRY_RUN" == 1 ]]; then
+    echo "python3 $ROOT/configs/derive_fig14.py $OUT_DIR/fig13 $OUT_DIR/fig14_checks.csv"
+  else
+    python3 "$ROOT/configs/derive_fig14.py" "$OUT_DIR/fig13" "$OUT_DIR/fig14_checks.csv"
+  fi
+  exit 0
+fi
+
 for ((TRIAL=1;TRIAL<=TRIALS;TRIAL++)); do
   case "$FIG" in
     fig4)
@@ -126,25 +231,22 @@ for ((TRIAL=1;TRIAL<=TRIALS;TRIAL++)); do
       ;;
     fig5) echo "Fig. 5 uses Fig. 4 stage metrics; no additional execution"; exit 0 ;;
     fig6)
-      echo "NOTE: Assembled spatial-operator baseline is not in run_profile.sh; this is a partial suite." >&2
       for spec in "geolife 1m 20" "tdrive 3m 75"; do
         read -r ds size radius <<< "$spec"
-        for method in dismc grid_d0 hilbert_d0 z_d0; do
+        for method in dismc grid_d0 hilbert_d0 z_d0 operator; do
           run_one fig6 "$ds" "$size" external 15 15 "$radius" "$method"
         done
       done
-      echo "Assembled spatial-operator baseline needs its separate entry point." >&2
       ;;
     fig7)
-      echo "NOTE: Assembled spatial-operator baseline is not in run_profile.sh; this covers DiSMC only." >&2
       for spec in \
         "geolife sparse 121585.662 102389.276 20" "geolife medium 122287.250 105282.863 20" \
         "geolife dense 114693.645 108474.258 20" "tdrive sparse 120924.613 114579.245 75" \
         "tdrive medium 106516.154 134723.013 75" "tdrive dense 126175.926 103115.703 75"; do
         read -r ds label x y radius <<< "$spec"
         run_one fig7 "$ds" 1m "$label" "$x" "$y" "$radius" dismc
+        run_one fig7 "$ds" 1m "$label" "$x" "$y" "$radius" operator
       done
-      echo "Operator comparison is not included in this Fig. 7 DiSMC-only entry." >&2
       ;;
     fig8)
       for ds in geolife tdrive porto; do

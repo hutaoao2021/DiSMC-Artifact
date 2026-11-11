@@ -1,0 +1,48 @@
+name: Spatial operator adapter JDK 8 integration
+on:
+  pull_request:
+    paths:
+      - 'configs/tools/**'
+      - 'configs/run_spatial_operator.sh'
+      - 'configs/run_paper_suite.sh'
+      - '.github/workflows/spatial-operator.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  spatial-operator:
+    runs-on: ubuntu-latest
+    env:
+      SPARK_LOCAL_IP: 127.0.0.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+      - name: Extract and compile integrated Java/Spark source
+        run: |
+          unzip -q artifact/DiSMC-source-release.zip
+          mvn -B -q -f DiSMC-source/pom.xml -DskipTests package
+          mvn -B -q -f DiSMC-source/pom.xml dependency:build-classpath \
+            -Dmdep.outputFile="$GITHUB_WORKSPACE/target-deps.txt"
+      - name: Compile and run current spatial operator on a five-point Spark fixture
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/spatial-classes"
+          CP="DiSMC-source/target/dismc-unified-1.0.0.jar:$(cat target-deps.txt)"
+          javac -encoding UTF-8 -source 8 -target 8 \
+            -cp "$CP" \
+            -d "$RUNNER_TEMP/spatial-classes" \
+            configs/tools/ArtifactSpatialOperatorMain.java
+          java -Dspark.master='local[2]' -Dspark.ui.enabled=false \
+            -cp "$RUNNER_TEMP/spatial-classes:$CP" \
+            com.ArtifactSpatialOperatorMain \
+            "$GITHUB_WORKSPACE/DiSMC-source/examples/five_points.txt" \
+            "$RUNNER_TEMP/operator-smoke.txt" 2 1 2 0 0
+          grep -q '^end_to_end_time_s=' "$RUNNER_TEMP/operator-smoke.txt"
+          test -d "$RUNNER_TEMP/operator-smoke.txt.members"
+          echo "Spatial operator full member-output smoke passed"
