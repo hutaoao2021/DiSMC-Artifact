@@ -84,3 +84,10 @@ Replace `fig4` with `fig6`, `fig7`, `fig8`, `fig9`, `fig10`, `fig11a`, `fig11b`,
 - The runner supports configurable query positions for parameter and spatial-sensitivity studies, with the configurations documented in the [experiment settings](configs/experiment-settings.md).
 
 [Result CSVs](results/README.md) report the paper's aggregate measurements. Runtime is expected to vary with cluster resources, data preparation and experimental configuration.
+
+
+## Historical provenance and validation boundaries
+
+[Recovered command evidence](docs/HISTORICAL-EVIDENCE.md) distinguishes exact historical commands from earlier/partial runs and current templates. The [command index](configs/historical-command-index.csv) is evidence, **not** proof that all published experiments have a complete historical command binding: Fig. 4 and TDrive Table I have complete recovered trial records, while Fig. 10–13 and GeoLife Table I have documented gaps.
+
+**10% budget:** The original formal source ZIP remains unchanged. A separately named [10% validation candidate](artifact/DiSMC-source-20261111-budget10-validated.zip) and [validation report](docs/BUDGET10-VALIDATION.md) permit the explicit diagnostic opt-in and passed a synthetic Spark 3.2.0 / JDK 8 end-to-end check. This **does not** establish full-data Table I reproduction; do not use the original ZIP for a 10% Micro-Partition run until its validator is updated. Both source variants are retained for provenance.
