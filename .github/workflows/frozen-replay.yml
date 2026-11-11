@@ -1,0 +1,37 @@
+name: Frozen replay R-W regression
+on:
+  pull_request:
+    paths:
+      - 'artifact/DiSMC-source-release.zip'
+      - '.github/workflows/frozen-replay.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
+      - name: Compile source and run frozen R-W test
+        shell: bash
+        run: |
+          set -euo pipefail
+          unzip -q artifact/DiSMC-source-release.zip
+          cd DiSMC-source
+          mvn -B -q -DskipTests package
+          mvn -B -q dependency:build-classpath -Dmdep.outputFile=target/dependencies.classpath
+          mkdir -p target/check-classes
+          javac -encoding UTF-8 -source 8 -target 8 \
+            -cp "target/dismc-unified-1.0.0.jar:$(cat target/dependencies.classpath)" \
+            -d target/check-classes \
+            src/test/java/com/FrozenReplayControlsTest.java
+          java -ea -cp "target/check-classes:target/dismc-unified-1.0.0.jar:$(cat target/dependencies.classpath)" \
+            com.FrozenReplayControlsTest
