@@ -19,7 +19,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '8'
-          cache: maven
       - name: Compile source and run frozen R-W test
         shell: bash
         run: |
