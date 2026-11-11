@@ -1,0 +1,4 @@
+CONFIG micro=true budget=0.10 diagnostic=true accepted=false
+Exception in thread "main" java.lang.AssertionError: budget compatibility mismatch: 0.10
+	at com.BudgetCompatibilityTest.expect(BudgetCompatibilityTest.java:12)
+	at com.BudgetCompatibilityTest.main(BudgetCompatibilityTest.java:14)
