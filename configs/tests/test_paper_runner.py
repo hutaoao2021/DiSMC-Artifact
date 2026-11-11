@@ -29,7 +29,11 @@ def dry_run(figure, trials=3):
             continue
         parts = shlex.split(line)
         context = dict(x.split("=", 1) for x in parts[:4])
-        assert parts[4] == "bash" and parts[5].endswith("scripts/run_profile.sh")
+        assert parts[4] == "bash"
+        if parts[5].endswith("configs/run_spatial_operator.sh"):
+            records.append((context, parts, {"__operator__": "true"}))
+            continue
+        assert parts[5].endswith("scripts/run_profile.sh")
         opts = parts[parts.index("--") + 1:] if "--" in parts else []
         assert len(opts) % 2 == 0
         config = dict(x.split("=", 1) for key, x in zip(opts[::2], opts[1::2])
@@ -118,12 +122,13 @@ class PaperCommandMatrixTest(unittest.TestCase):
         )
 
     def test_available_baseline_and_size_sweeps(self):
-        for fig, count in [("fig6", 24), ("fig7", 18), ("fig8", 108)]:
+        for fig, count in [("fig6", 30), ("fig7", 36), ("fig8", 108)]:
             with self.subTest(fig=fig):
                 rows, message = dry_run(fig)
                 self.assertEqual(count, len(rows))
                 if fig in ("fig6", "fig7"):
-                    self.assertIn("not in run_profile.sh", message)
+                    operator_rows = [r for r in rows if "__operator__" in r[2]]
+                    self.assertEqual(6 if fig == "fig6" else 18, len(operator_rows))
 
     def test_fig5_is_derived(self):
         rows, message = dry_run("fig5")
