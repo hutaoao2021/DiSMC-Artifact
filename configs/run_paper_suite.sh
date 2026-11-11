@@ -14,7 +14,7 @@ if [[ -z "$FIG" || "$FIG" == "--help" ]]; then
   exit 0
 fi
 [[ "$TRIALS" =~ ^[1-9][0-9]*$ ]] || { echo "TRIALS must be a positive integer" >&2; exit 2; }
-[[ "$DRY_RUN" == 1 || -f "$SRC/scripts/run_profile.sh" ]] || { echo "Extract artifact/DiSMC-source-release.zip first" >&2; exit 2; }
+[[ "$DRY_RUN" == 1 || -f "$SRC/scripts/run_profile.sh" ]] || { echo "Extract artifact/dismc-source.zip first" >&2; exit 2; }
 # The 1M position-control median is a runnable example for qM, not a verified
 # numeric match to the 2M/3M qM of other figures. Override when known.
 MEDIUM_GEOLIFE_X=${MEDIUM_GEOLIFE_X:-122287.250}

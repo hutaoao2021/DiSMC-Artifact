@@ -30,7 +30,7 @@ Dataset settings, query parameters and evaluation protocols below follow the DiS
 | Fig. 13 | Frozen GeoLife/TDrive inputs | q=(15,15), fixed query | Frozen | Four (R,W) reuse combinations; three-run E2E means | Run `fig13`: capture one state, then four R/W combinations over three replay trials per dataset |
 | Fig. 14 | Same frozen inputs as Fig. 13 | Same query | Frozen | Task-summed formal generation/counting checks from Fig. 13's runs | **No new execution**; `fig14` sums Fig. 13 `.micro_tasks.csv` checks |
 
-The [supplementary PDF](../supplementary/DiSMC-supplementary-20261110.pdf) additionally reports input policy, query-position robustness, counting resolution (λ=0.5/1/2/4), parameter sensitivity, selector diagnostics, and original ESMC datasets.
+The [supplementary PDF](../supplementary/dismc-supplementary.pdf) additionally reports input policy, query-position robustness, counting resolution (λ=0.5/1/2/4), parameter sensitivity, selector diagnostics, and original ESMC datasets.
 
 ## Parameter matching notes
 
