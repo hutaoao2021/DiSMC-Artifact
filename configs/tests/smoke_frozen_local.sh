@@ -88,14 +88,47 @@ done
 query greedy replay true true work_greedy
 python3 - "$ARTIFACT_RESULTS_DIR" <<'PY'
 from pathlib import Path
+import json
 import sys
 root=Path(sys.argv[1])
 names=["capture","Rfalse_Wfalse","Rfalse_Wtrue",
        "Rtrue_Wfalse","Rtrue_Wtrue","greedy"]
+def find(obj, key):
+    if isinstance(obj, dict):
+        if key in obj: return obj[key]
+        for value in obj.values():
+            found=find(value,key)
+            if found is not None: return found
+    if isinstance(obj,list):
+        for value in obj:
+            found=find(value,key)
+            if found is not None: return found
+    return None
+def exported(name):
+    folder=root/(name+".members")
+    parts=list(sorted(folder.glob("part-*")))
+    assert parts, "No Spark member part files: "+name
+    rows=[]
+    for part in parts: rows.extend(part.read_text().splitlines())
+    assert rows, "No exported members: "+name
+    return sorted(rows)
+reference=None
 for name in names:
     assert (root/name).stat().st_size > 0, name
     assert (root/(name+".micro_tasks.csv")).stat().st_size > 0, name
     assert (root/(name+".members")).is_dir(), name
-    assert (root/(name+".json")).is_file(), name
+    diagnostic=root/(name+".json")
+    assert diagnostic.is_file(), name
+    details=json.loads(diagnostic.read_text())
+    if name.startswith("R"):
+        expected_reuse,expected_frontier=name.split("_")
+        expected_reuse=expected_reuse[1:]=="true"
+        expected_frontier=expected_frontier[1:]=="true"
+        assert find(details,"micro_completion_reuse")==expected_reuse, name+" R misconfigured"
+        assert find(details,"micro_probe_frontier")==expected_frontier, name+" W misconfigured"
+    rows=exported(name)
+    if reference is None: reference=rows
+    assert rows==reference, "Formal result member mismatch: "+name
 print("PASS: 1 capture + 4 R/W + 1 greedy actual Spark local runs")
+print("PASS: all six complete member exports match; recorded R/W flags checked")
 PY
