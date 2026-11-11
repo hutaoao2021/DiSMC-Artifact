@@ -1,31 +1,29 @@
-# DiSMC — Research Artifact
+# DiSMC Research Artifact
 
 **DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries**
 
-This repository collects the DiSMC research-paper artifact. The implementation is a Java/Spark system for distributed skyline micro-cluster queries with dependency-complete task inputs, joint physical planning, and safe reuse of completed probe work.
+This repository provides the Java/Spark implementation, build and run instructions, dataset preparation scripts, experiment settings, reported result tables, and supplementary material for the DiSMC paper.
 
-> **Release status (2026-11-11):** This repository is **Public**. The source ZIP and final supplementary PDF are uploaded, and their Git blob hashes match locally verified release files. Independent anonymous-browser download verification remains a final external check.
+## Contents
 
-## Package index
-
-| Path | Purpose |
+| Path | Contents |
 | --- | --- |
-| [`artifact/DiSMC-source-20261102-release.zip`](artifact/DiSMC-source-20261102-release.zip) | Integrated Java/Spark source, tests, launch scripts, and five-point fixture (**uploaded; checksum verified**) |
-| [`supplementary/DiSMC-supplementary-20261110.pdf`](supplementary/DiSMC-supplementary-20261110.pdf) | Final supplementary technical document (**uploaded; checksum verified**) |
-| [`docs/INSTALL.md`](docs/INSTALL.md) | Software requirements, compilation, selected regression checks, and smoke test |
-| [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Execution modes, configuration boundaries, provenance and validation scope |
-| [`configs/experiment-settings.md`](configs/experiment-settings.md) | Paper-specific workload, budget, query and measurement registry |
-| [`configs/run-commands.md`](configs/run-commands.md) | Source-backed launcher syntax, templates and known configuration limitations |
-| [`configs/fixed-query-coordinates.csv`](configs/fixed-query-coordinates.csv) | Eight fixed online queries, positional controls and full-data coordinates |
-| [`results/README.md`](results/README.md) | Paper-reported aggregate results and their interpretation limits |
-| [`data/README.md`](data/README.md) | Dataset sources, input preparation and redistribution limitations |
+| [`artifact/DiSMC-source-release.zip`](artifact/DiSMC-source-release.zip) | Integrated Java/Spark source, tests, launch scripts, and the validated 10% Micro-Partition budget compatibility fix |
+| [`docs/INSTALL.md`](docs/INSTALL.md) | Software requirements, build, tests, and smoke run |
+| [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Execution profiles and reproduction scope |
+| [`configs/experiment-settings.md`](configs/experiment-settings.md) | Dataset sizes, queries, radii, budgets, and experiment protocols |
+| [`configs/run-commands.md`](configs/run-commands.md) | Copyable commands for build, smoke, distributed execution, baselines, and ablations |
+| [`configs/fixed-query-coordinates.csv`](configs/fixed-query-coordinates.csv) | Fixed query coordinates used by the evaluation |
+| [`data/README.md`](data/README.md) | Dataset sources, historical preprocessing scripts, and input format |
+| [`results/README.md`](results/README.md) | Result CSV descriptions and metric definitions |
+| [`supplementary/DiSMC-supplementary-20261110.pdf`](supplementary/DiSMC-supplementary-20261110.pdf) | Supplementary proofs, protocols, and additional experiments |
 
 ## Quick start
 
-The packaged source archive extracts into a `DiSMC-source/` directory. On Linux or a compatible Bash environment with **JDK 8** and **Apache Spark 3.2.0 (Scala 2.12)**:
+Requirements: JDK 8, Apache Spark 3.2.0 with Scala 2.12, and Bash. From the repository root:
 
 ```bash
-unzip artifact/DiSMC-source-20261102-release.zip
+unzip artifact/DiSMC-source-release.zip
 cd DiSMC-source
 export JAVA_HOME=/path/to/jdk8
 export PATH="$JAVA_HOME/bin:$PATH"
@@ -38,31 +36,18 @@ OUT_DIR="$(mktemp -d)"
 bash scripts/run_small_online.sh "$OUT_DIR/smoke.txt"
 ```
 
-The last command uses the bundled five-point example, Spark `local[2]`, a 5% additional-input-record budget, and member export. It is a **small functionality check**, not a reproduction of the paper's large-scale performance results. Use a new output path for each run.
+The five-point smoke run checks that the packaged application launches and exports members. It is a functionality check, not a paper-scale performance benchmark.
 
-If Maven is installed, `build.sh` uses Maven; otherwise it compiles the Java sources with JDK tools and the Spark runtime JARs. The selected-check script requires `SPARK_HOME` in either case.
+## Run the paper methods
 
-## Reproducing paper experiments
+Start with [`configs/run-commands.md`](configs/run-commands.md). It documents the distributed launcher, query and data parameters, the `joint_peak` and `work_greedy` selector settings, baseline profiles, and the 5%/10% budget options. Use [`configs/experiment-settings.md`](configs/experiment-settings.md) for the dataset and query settings associated with each figure and table.
 
-Use [the reproducibility guide](docs/REPRODUCIBILITY.md), [the experiment settings and figure index](configs/experiment-settings.md), [the run-command guide](configs/run-commands.md), and the [published result tables](results/README.md) together. The paper distinguishes complete online end-to-end measurements, frozen-state replay, and component-only measurements. These scopes must not be mixed.
+For the Micro-Partition path, the default additional-input budget is 1%. The release supports explicit 5% and 10% diagnostic budgets with `spark.skyline.budgetDiagnostic=true` and `spark.skyline.shardReadBudget=0.05` or `0.10`.
 
-For clustered runs, set `SPARK_MASTER` and the executor/driver resources deliberately. The source launcher is `scripts/run_profile.sh`. Parameter and command guidance is available in `configs/`; some historical experimental states and exact runtime options remain outside the generic launcher. The five-point smoke command is not an exact paper benchmark command.
+## Data and results
 
-The source is a **2026-11-02 integrated release** including the recorded numerical correction and portable shell packaging, not the byte-identical historical executable used for every published timing. Its bundled `VERIFICATION.json` reports earlier checks; the full paper performance suite has not been rerun with this integrated release.
+Raw third-party datasets are not redistributed. Their official sources, preparation steps, and historical processing scripts are described in [`data/README.md`](data/README.md). The CSV files in `results/` contain the reported aggregate values used by the paper; see [`results/README.md`](results/README.md) for their scope.
 
-## Data and supplementary materials
+## Reproduction scope
 
-The repository does not redistribute third-party GeoLife or TDrive raw datasets. See [data preparation notes](data/README.md) for provenance and preprocessing conventions. The supplementary PDF supplies additional protocols, result tables, figures and correctness arguments.
-
-## Citation
-
-*DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries.*
-
-## Recovered provenance and validated budget candidate (2026-11-11)
-
-- [Historical evidence coverage](docs/HISTORICAL-EVIDENCE.md): distinguishes exact figure bindings, antecedent runs and missing records.
-- [Recovered historical preprocessing](data/historical/README.md), separate from the later reference converter.
-- [119-record command index](configs/historical-command-index.csv) and [Fig. 4 per-trial times](results/online_fixed_queries_per_trial.csv).
-- [Opt-in 10% validation](docs/BUDGET10-VALIDATION.md) and [separate tested candidate source ZIP](artifact/DiSMC-source-20261111-budget10-validated.zip). The original formal ZIP is retained unchanged.
-
-Run `python3 tools/check_recovered_evidence.py` to check distributed hashes and aggregate arithmetic. This is distinct from executing the historical benchmark suite.
+The source archive includes build scripts, selected regression tests, and a small end-to-end example. Large-scale paper timings were collected with their recorded data, configuration, and execution environment; the release does not claim that the entire performance suite has been rerun with this packaged source. The run instructions explain how to execute the methods and how to configure the reported workloads.

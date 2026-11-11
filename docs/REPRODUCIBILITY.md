@@ -1,83 +1,32 @@
-# DiSMC reproducibility guide
+# Reproducibility guide
 
-This guide is grounded in the **2026-11-02 integrated source release**, including its portable packaging fix. The integrated release is **not** claimed to be the exact historical binary of every experiment reported in the manuscript.
+## Execution entry points
 
-## 1. Entry points and their scope
+From the extracted `DiSMC-source/` directory:
 
-| Entry point | Purpose |
+| Command or profile | Purpose |
 | --- | --- |
-| `bash build.sh` | Compile the source to `target/dismc-unified-1.0.0.jar` and produce build provenance |
-| `bash scripts/check_selected.sh` | Run 14 selected regression classes |
-| `bash scripts/run_small_online.sh NEW_OUTPUT_PATH` | Five-point Spark `local[2]` smoke query with member export |
-| `bash scripts/run_profile.sh ...` | Launch a named method profile with explicitly supplied experiment inputs |
+| `bash build.sh` | Compile the Java/Spark source |
+| `bash scripts/check_selected.sh` | Run selected regression tests |
+| `bash scripts/run_small_online.sh NEW_OUTPUT_PATH` | Run the bundled five-point smoke query |
+| `bash scripts/run_profile.sh ...` | Run a distributed method profile or the single-machine ESMC baseline |
 
-Read [the installation guide](INSTALL.md) first.
+## Available profiles
 
-## 2. Profile launcher syntax
+- `hilbert_full` / `full`: complete DiSMC execution profile.
+- `single_esmc`: single-machine ESMC baseline.
+- `z_d0`, `hilbert_d0`, `grid_d0`: distributed baseline profiles.
+- `hilbert_wo_planner`, `hilbert_wo_engine`: principal ablation profiles.
+- `wo_planner`, `wo_engine`, `wo_dependency_partition`, `wo_sharing`, `wo_refinement`, `wo_new_bounds`, `wo_prepared_reuse`: additional source-supported ablation profiles.
 
-From `DiSMC-source/`:
+For the Micro-Partition selector, `spark.skyline.microSelector=joint_peak` selects the joint planner and `spark.skyline.microSelector=work_greedy` selects the greedy comparison policy. These are selector settings, not separate launcher profiles.
 
-```text
-bash scripts/run_profile.sh PROFILE INPUT OUTPUT PARTITIONS RADIUS DENSITY CELL_FACTOR [-- spark-submit-options]
-```
+## Inputs and parameters
 
-The optional `--` delimiter is mandatory if extra Spark options are given. Examples of recognized profiles include `hilbert_full`, `hilbert_wo_planner`, `hilbert_wo_engine`, `z_d0`, `hilbert_d0`, `grid_d0`, and `single_esmc`; inspect the `case "$PROFILE"` statement for the authoritative accepted set.
+The program input is UTF-8 text with one projected, translated `x y` coordinate pair per line and no header. Use prepared data accessible to the Spark driver and executors. Set query coordinates with both `QUERY_X` and `QUERY_Y`; set radius, partition count, density, and cell factor in the launcher arguments.
 
-The launcher dispatches distributed profiles through `spark-submit` and the `single_esmc` comparator through a Java process using the Spark runtime classpath.
+Use [`../configs/experiment-settings.md`](../configs/experiment-settings.md) and [`../configs/run-commands.md`](../configs/run-commands.md) for the paper workload values and executable examples.
 
-## 3. Required execution configuration
+## Scope
 
-The source launcher reads:
-
-- `SPARK_HOME` — required.
-- `SPARK_MASTER` — required for distributed profiles, **not** for `single_esmc`.
-- `TOTAL_EXECUTOR_CORES`, `EXECUTOR_CORES`, `EXECUTOR_MEMORY`, `DRIVER_MEMORY` — specify explicitly to match an experiment rather than relying on portable fallback values.
-- `QUERY_X` and `QUERY_Y` — set **both** to reproduce a paper query. If omitted, the Java program uses (15.0, 15.0); do not assume this matches an arbitrary benchmark row.
-
-Supply `INPUT` as a location accessible from the corresponding execution mode. In a multi-node Spark run, a driver-only local file path is not a substitute for data accessible to executors.
-
-A *parameterized template*, **not** a complete manuscript experiment command:
-
-```bash
-export SPARK_HOME=/path/to/spark-3.2.0
-export SPARK_MASTER=spark://your-master-host:7077
-export TOTAL_EXECUTOR_CORES=40
-export EXECUTOR_CORES=4
-export EXECUTOR_MEMORY=4G
-export DRIVER_MEMORY=4G
-export QUERY_X=15
-export QUERY_Y=15
-
-bash scripts/run_profile.sh hilbert_full \
-  "$INPUT_URI" "$NEW_OUTPUT_PATH" "$PARTITIONS" "$RADIUS_METERS" \
-  "$DENSITY" "$CELL_FACTOR" \
-  -- --conf spark.skyline.shardReadBudget=0.05
-```
-
-Replace every placeholder and resource choice with the appropriate experiment values. The script rejects preexisting main or selected sidecar output paths; always use a fresh output prefix. For `single_esmc`, only extra options in the form `--conf spark.KEY=VALUE` are accepted and translated to JVM system properties.
-
-## 4. A necessary 5% budget distinction
-
-Do not blindly reuse one budget configuration across execution modes.
-
-- The bundled five-point smoke script requests `spark.skyline.shardReadBudget=0.05` and does **not** enable the Micro-Partition experimental path.
-- In `ExperimentConfig.java`, the Micro-Partition path defaults to `0.01`. Requesting `0.05` **also requires** `spark.skyline.budgetDiagnostic=true` and compatible Micro-Partition experiment settings.
-- These budget flags alone do **not** reconstruct the paper's acquisition, planner, replay or execution configuration. Exact figure-by-figure commands and configuration files will be published in the separate experiment-config stage.
-
-The main-paper full-input 10% experiment and the ordinary 5% experiments must remain distinct.
-
-## 5. Output and provenance
-
-After a successful `run_profile.sh` invocation, a `.manifest` sidecar reports method/profile, input/output paths, query settings, resources, JAR SHA-256 and selected result fields. Some experimental configurations additionally generate JSON, observation, member-export or task-details files.
-
-The source archive includes:
-
-- `SOURCE_MANIFEST.json`: file inventory and integrated source checksums.
-- `VERIFICATION.json`: prior build/regression/smoke verification record.
-- `PUBLIC_PACKAGING_NOTES.md`: portability changes made to shell scripts and documentation.
-
-**Validation scope:** the packaging audit checked archive integrity and shell interfaces; it did **not** perform a new JDK 8/Spark 3.2.0 end-to-end run or rerun the paper's entire performance suite. Do not relabel historical timings as new measurements of this integrated release.
-
-## 6. Interpreting experiments
-
-The manuscript separates **complete online E2E**, **frozen-state replay**, and **component-only diagnostics**. Use consistent data subsets, query locations, budgets, profiles, timing boundaries and aggregation rules. See [the experimental settings and figure index](../configs/experiment-settings.md), the [dataset notes](../data/README.md) and the [final supplementary PDF](../supplementary/DiSMC-supplementary-20261110.pdf). A five-point smoke result does not validate large-scale performance claims.
+The packaged source, regression checks, and smoke query provide an executable entry point. The CSV files contain the paper-reported aggregate measurements. Exact historical timings depend on the corresponding prepared inputs, build, acquisition or frozen state, Spark resources, and timing boundary; the smoke query is not a substitute for those experiments.

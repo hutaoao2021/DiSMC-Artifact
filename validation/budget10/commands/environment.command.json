@@ -1,1 +1,0 @@
-["bash", "-c", "java -version; javac -version; \"$SPARK_HOME/bin/spark-submit\" --version"]

@@ -1,8 +1,0 @@
-{
-  "historical_relative_path": "output/geolife_full_budget10_20261015/src/main/java/com/ExperimentConfig.java",
-  "historical_file_sha256": "45b05ada2876a8b95fabcbd379a9cdf6b15872ea5a2e09b3f794781c7b719299",
-  "current_candidate_file_sha256": "1e9adfef594004be874ec16ad56d57c0570422f3e51f1307c0c24e9b3480be70",
-  "budget_guard_matches_historical_fix": true,
-  "other_existing_difference": "Integrated source retains its pre-existing microFrozenStateLoad exception to the cost task-order guard; not changed by this candidate.",
-  "comparison_scope": "Available historical ExperimentConfig source; not a full historical source-tree equivalence claim."
-}
