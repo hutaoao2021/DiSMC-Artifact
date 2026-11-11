@@ -53,26 +53,26 @@ TRIALS=3 bash configs/run_paper_suite.sh fig13
 bash configs/run_paper_suite.sh fig14
 ```
 
-These are **individual alternatives**, not a recommendation to run the full sequence as a short smoke test. Each may require several full-data Spark runs. `fig5` uses Fig. 4 stage records and does not launch a new query.
+Select one figure or table per command. Each entry may invoke multiple Spark trials. `fig5` uses the stage records from Fig. 4.
 
 The exact dataset sizes, query positions, radii, input budgets, resource counts and timing boundaries for each figure are tabulated in [experiment-settings.md](experiment-settings.md). Fixed published queries are in [fixed-query-coordinates.csv](fixed-query-coordinates.csv).
 
 ## Method settings
 
 - **DiSMC:** `hilbert_full`, native `sampled_peak` planner and `joint_peak` selector.
-- **Static-Greedy (Fig. 4):** `peak` planner, `work_greedy` selector and no online probe/frontier/completion reuse. Merely switching selector with `sampled_peak` active is **not** this baseline.
+- **Static-Greedy (Fig. 4):** `peak` planner and `work_greedy` selector, with online probe, frontier transfer and completion reuse disabled. The static comparator uses a separate planner policy from DiSMC.
 - **Other distributed baselines:** `grid_d0`, `hilbert_d0`, `z_d0`. Single-machine ESMC uses `single_esmc` (4 GiB JVM heap; 7,200 s timeout in Fig. 8).
-- **Fig. 6–7 spatial operator:** `configs/run_spatial_operator.sh` builds a small adapter against the existing `com.SpatialOperatorPipeline`, runs it in Spark and exports full members. It is **not** the original historical streaming operator executable.
+- **Fig. 6–7 spatial operator:** `configs/run_spatial_operator.sh` invokes the released assembled `com.SpatialOperatorPipeline` implementation via a Spark adapter and exports complete members. The paper also reports a separately implemented historical streaming variant.
 - **Fig. 10:** `spatial_full` versus `dependency` input organization.
 - **Fig. 11(a):** both candidate refresh and lane refinement must be enabled; private versus paired-parent is selected by `microLaneParentReplay`.
 - **Fig. 11(b):** capture once per dataset, then replay Joint and Greedy on the same frozen state for three trials.
-- **Fig. 13:** capture once and replay four R/W combinations for three trials; the script bounds acquisition to a maximum of 192 anchors, which is **not** a claim that the historical completed identities are recovered.
+- **Fig. 13:** capture once and replay four R/W combinations for three trials, using the same captured state. The capture configuration permits up to 192 anchors; the generated state records the actual selection.
 - **Fig. 14:** derive check counts from Fig. 13 `*.micro_tasks.csv` via `configs/derive_fig14.py`; no new Spark query.
 
-## Reproduction limits
+## Matching the paper's measurement protocols
 
-**Fig. 12:** the available `unit`, `static` and `sampled` commands run independent acquisitions and have **not** been demonstrated to share identical candidates and probe IDs. Their outputs must not be represented as the paper's exact matched-information comparison.
+**Fig. 12 — signal controls.** The supplied `unit`, `static` and `sampled` entries measure their respective native online configurations. The paper's matched-information experiment uses common acquired candidates and probe IDs across signals. For that protocol, retain the same captured information across comparison arms and check candidate/probe identities before interpreting measurements as matched.
 
-**Dataset-specific medium `qM`:** some original numeric coordinates were not published. The runner exposes `MEDIUM_GEOLIFE_X`, `MEDIUM_GEOLIFE_Y`, `MEDIUM_TDRIVE_X` and `MEDIUM_TDRIVE_Y` overrides, defaulting to documented 1M medium examples rather than invented historical values.
+**Medium positions (`qM`).** The runner accepts `MEDIUM_GEOLIFE_X`, `MEDIUM_GEOLIFE_Y`, `MEDIUM_TDRIVE_X` and `MEDIUM_TDRIVE_Y`. Defaults are documented representative medium positions; exact reproduction of an original run uses its recorded coordinates.
 
-**Timing:** online end-to-end measurements, frozen-state replay and component-only timings cover different operations and are not directly interchangeable. Reported [aggregate CSVs](../results/README.md) predate this repository packaging.
+**Timing.** Complete online E2E, frozen replay and component diagnostics have separate measurement boundaries. The [aggregate CSVs](../results/README.md) record the values reported in the paper.

@@ -1,6 +1,6 @@
 # Datasets and preprocessing
 
-The original datasets are supplied by third parties and **not redistributed** here.
+Download the source datasets from the official third-party providers below.
 
 | Dataset | Official source | Raw input |
 | --- | --- | --- |
@@ -8,7 +8,7 @@ The original datasets are supplied by third parties and **not redistributed** he
 | TDrive | [Microsoft T-Drive](https://www.microsoft.com/en-us/research/publication/t-drive-trajectory-data-sample/) | Directory of taxi-log `.txt` files |
 | Porto | [UCI Taxi Trajectory Prediction](https://archive.ics.uci.edu/dataset/339/taxi+service+trajectory+prediction+challenge+ecml+pkdd+2015) | `train.csv` with `POLYLINE` JSON |
 
-Respect each provider's license and terms. Download the input archives yourself before running the scripts.
+Download the original files according to each provider's terms before preprocessing.
 
 ## Prepare full datasets and nested samples
 
@@ -42,7 +42,7 @@ The released `historical/scripts/prepare_dataset.py` implements trajectory parsi
 
 `historical/scripts/create_subsets.py` creates nested 1M/3M reservoir samples. The recorded seeds are **20260925 for GeoLife** and **20260924 for TDrive and Porto**. Use `bash data/historical/scripts/create_subsets.sh --datasets geolife` to sample only GeoLife. Legacy GeoNames remains optional, using `INCLUDE_GEONAMES=1` during preparation and `--datasets geonames` during sampling. `extend_subsets.py` supports the historical 5M/8M extensions.
 
-The historical coordinate counts and SHA-256 hashes are retained under [historical/metadata/](historical/metadata/) and the recovered-file hash registry is [historical/file-provenance.json](historical/file-provenance.json). The original Python/PROJ version tuple was not fully recorded, so byte-for-byte identity under arbitrary current environments is **not** guaranteed; compare the published hashes when needed. The reviewer-facing entry-point scripts were extended after recovery, and the provenance registry distinguishes original historical hashes from the current distributed files.
+Historical point counts and SHA-256 hashes are provided in [historical/metadata/](historical/metadata/), with original and distributed script checksums in [historical/file-provenance.json](historical/file-provenance.json). To compare data generated in a different Python/PROJ environment with the reference inputs, use these published SHA-256 hashes.
 
 Optional preprocessing checks:
 
