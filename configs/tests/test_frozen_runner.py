@@ -27,6 +27,9 @@ class FrozenPaperCommandsTest(unittest.TestCase):
         self.assertEqual(26, len(rows))
         captures = [x for x in rows if x[2].get("spark.skyline.microFrozenStateExport") == "true"]
         self.assertEqual(2, len(captures))
+        for capture in captures:
+            self.assertEqual("8", capture[2]["spark.skyline.microProbeOwnerLimit"])
+            self.assertEqual("false", capture[2]["spark.skyline.microLaneProbeRefinement"])
         for ds in ("geolife", "tdrive"):
             batch = [x for x in rows if "spark.skyline.microFrozenStateLoad" in x[2]
                      and "/" + ds + "_" in x[1][8]]

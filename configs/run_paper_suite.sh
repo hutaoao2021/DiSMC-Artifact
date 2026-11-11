@@ -162,9 +162,18 @@ if [[ "$FIG" == fig11b || "$FIG" == fig13 ]]; then
       input_sha=$(sha256sum "$input" | awk '{print $1}')
     fi
     TRIAL=1
-    FROZEN_ACTION=capture FROZEN_INPUT_SHA="$input_sha" \
-      SELECTOR=joint_peak REFRESH=true LANE=true REUSE=true FRONTIER=true \
-      run_one "$FIG" "$ds" "$size" frozen_capture "$x" "$y" "$radius" dismc
+    if [[ "$FIG" == fig13 ]]; then
+      # The supplement reports 192 completed anchors: bound the capture
+      # to eight owner probes with at most 24 anchors each, no added lane probes.
+      FROZEN_ACTION=capture FROZEN_INPUT_SHA="$input_sha" \
+        SELECTOR=joint_peak PROBE_OWNER_LIMIT=8 REFRESH=false LANE=false \
+        REUSE=true FRONTIER=true \
+        run_one "$FIG" "$ds" "$size" frozen_capture "$x" "$y" "$radius" dismc
+    else
+      FROZEN_ACTION=capture FROZEN_INPUT_SHA="$input_sha" \
+        SELECTOR=joint_peak REFRESH=true LANE=true REUSE=true FRONTIER=true \
+        run_one "$FIG" "$ds" "$size" frozen_capture "$x" "$y" "$radius" dismc
+    fi
     state="$OUT_DIR/$FIG/${ds}_${size}_frozen_capture_dismc_trial1.txt.frozen_calibration.bin"
     if [[ "$DRY_RUN" == 1 ]]; then state_sha=DRY_RUN_FROZEN_SHA256
     else

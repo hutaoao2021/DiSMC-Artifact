@@ -161,7 +161,7 @@ This does not rerandomize the samples or overwrite existing outputs. The supplem
 
 **Matched information:** Fig. 12's Unit/Static/Sampled commands run the corresponding code switches with fixed acquisition limits. They are valid controlled runs, but identical candidate/probe IDs have not yet been empirically demonstrated. Do not treat differences as the paper's exact matched-information measurements without comparing their actual identities.
 
-**Frozen controls:** Fig. 11(b) captures one set of inputs/candidate/work/probe information per dataset, then replays it three times each with Joint and Greedy. Fig. 13 likewise captures once and runs all four R/W combinations three times. The source ZIP honors independent R/W controls (JDK 8 regression passed). Fig. 14 is derived from Fig. 13's `*.micro_tasks.csv` (candidate, z-window and distance-check counters) without rerunning Spark.
+**Frozen controls:** Fig. 11(b) captures one set of inputs/candidate/work/probe information per dataset, then replays it three times each with Joint and Greedy. Fig. 13 likewise captures once and runs all four R/W combinations three times. The source ZIP honors independent R/W controls (JDK 8 regression passed). Fig. 14 is derived from Fig. 13's `*.micro_tasks.csv` (candidate, z-window and distance-check counters) without rerunning Spark. Fig. 13 capture bounds discovery to eight owners with up to 24 anchors each (192 maximum) and disables extra lane/refinement probes; observed completed-anchor identity/count must still be checked against the paper before claiming exact historical replication.
 
 ```bash
 TRIALS=3 bash configs/run_paper_suite.sh fig6
