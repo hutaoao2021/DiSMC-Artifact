@@ -8,13 +8,13 @@ This repository contains the Java/Spark implementation, data-preparation scripts
 
 | Path | Purpose |
 | --- | --- |
-| [Source release](artifact/DiSMC-source-release.zip) | Complete Java source, build scripts and selected tests |
+| [Source release](artifact/dismc-source.zip) | Complete Java source, build scripts and selected tests |
 | [Data preparation](data/README.md) | Official GeoLife, TDrive and Porto sources; preprocessing and fixed-seed sampling |
 | [Run instructions](configs/run-commands.md) | Shell commands for the paper's figures and Table I |
 | [Experiment settings](configs/experiment-settings.md) | Exact reported datasets, query parameters, budgets, resource configuration and measurement scope |
 | [Fixed queries](configs/fixed-query-coordinates.csv) | Recorded query positions |
 | [Reported results](results/README.md) | CSV aggregates and metric definitions |
-| [Supplement](supplementary/DiSMC-supplementary-20261110.pdf) | Additional protocols, results and proofs |
+| [Supplement](supplementary/dismc-supplementary.pdf) | Additional protocols, results and proofs |
 
 GeoLife, TDrive and Porto are obtained from the original providers listed in the [data guide](data/README.md).
 
@@ -29,7 +29,7 @@ export JAVA_HOME=/path/to/jdk8
 export PATH="$JAVA_HOME/bin:$PATH"
 export SPARK_HOME=/path/to/spark-3.2.0
 
-unzip artifact/DiSMC-source-release.zip
+unzip artifact/dismc-source.zip
 (cd DiSMC-source && bash build.sh && bash scripts/check_selected.sh)
 
 OUT="$(mktemp -d)"

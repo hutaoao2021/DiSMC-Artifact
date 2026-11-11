@@ -4,7 +4,7 @@ on:
     paths:
       - 'configs/tests/smoke_frozen_local.sh'
       - '.github/workflows/final-acceptance.yml'
-      - 'artifact/DiSMC-source-release.zip'
+      - 'artifact/dismc-source.zip'
   workflow_dispatch:
 
 permissions:
@@ -23,8 +23,8 @@ jobs:
       - name: Build integrated JDK 8 Spark 3.2.0 source
         run: |
           set -euo pipefail
-          unzip -tq artifact/DiSMC-source-release.zip
-          unzip -q artifact/DiSMC-source-release.zip
+          unzip -tq artifact/dismc-source.zip
+          unzip -q artifact/dismc-source.zip
           mvn -B -q -f DiSMC-source/pom.xml -DskipTests package
           mvn -B -q -f DiSMC-source/pom.xml dependency:build-classpath \
             -Dmdep.outputFile="$GITHUB_WORKSPACE/target-deps.txt"
@@ -45,7 +45,7 @@ jobs:
           python3 - <<'PY'
           import re,subprocess,zipfile
           names=subprocess.check_output(["git","ls-files"],text=True).splitlines()
-          with zipfile.ZipFile("artifact/DiSMC-source-release.zip") as archive:
+          with zipfile.ZipFile("artifact/dismc-source.zip") as archive:
               names.extend(archive.namelist())
               assert archive.testzip() is None
           bad=re.compile(r"(^|/)(?:\.env(?:\..*)?|id_rsa|id_ed25519|credentials(?:\.json)?|[^/]*\.(?:pem|key|p12|pfx))$",re.I)

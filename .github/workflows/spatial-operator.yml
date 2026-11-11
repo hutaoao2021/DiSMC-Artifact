@@ -25,7 +25,7 @@ jobs:
           java-version: '8'
       - name: Extract and compile integrated Java/Spark source
         run: |
-          unzip -q artifact/DiSMC-source-release.zip
+          unzip -q artifact/dismc-source.zip
           mvn -B -q -f DiSMC-source/pom.xml -DskipTests package
           mvn -B -q -f DiSMC-source/pom.xml dependency:build-classpath \
             -Dmdep.outputFile="$GITHUB_WORKSPACE/target-deps.txt"
