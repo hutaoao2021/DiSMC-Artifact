@@ -42,7 +42,7 @@ The released `historical/scripts/prepare_dataset.py` implements trajectory parsi
 
 `historical/scripts/create_subsets.py` creates nested 1M/3M reservoir samples. The recorded seeds are **20260925 for GeoLife** and **20260924 for TDrive and Porto**. Use `bash data/historical/scripts/create_subsets.sh --datasets geolife` to sample only GeoLife. Legacy GeoNames remains optional, using `INCLUDE_GEONAMES=1` during preparation and `--datasets geonames` during sampling. `extend_subsets.py` supports the historical 5M/8M extensions.
 
-Historical point counts and SHA-256 hashes are provided in [historical/metadata/](historical/metadata/), with original and distributed script checksums in [historical/file-provenance.json](historical/file-provenance.json). To compare data generated in a different Python/PROJ environment with the reference inputs, use these published SHA-256 hashes.
+Reference point counts and SHA-256 hashes are provided in [historical/metadata/](historical/metadata/). You can use these hashes to compare generated datasets with the documented reference inputs.
 
 Optional preprocessing checks:
 

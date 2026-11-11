@@ -1,8 +1,0 @@
-{
-  "observed_on": "2026-11-11",
-  "python": "3.8.8 (default, Apr 13 2021, 19:58:26) \n[GCC 7.3.0]",
-  "pyproj": "3.5.0",
-  "PROJ": "9.2.0",
-  "sort": "sort (GNU coreutils) 8.32",
-  "scope": "current validation environment, not proof of historical preprocessing dependency versions"
-}
