@@ -44,6 +44,32 @@ Start with [`configs/run-commands.md`](configs/run-commands.md). It documents th
 
 For the Micro-Partition path, the default additional-input budget is 1%. The release supports explicit 5% and 10% diagnostic budgets with `spark.skyline.budgetDiagnostic=true` and `spark.skyline.shardReadBudget=0.05` or `0.10`.
 
+## Run the published parameter matrix
+
+From the repository root after extracting/building the release source,
+setting JDK 8 / Spark 3.2.0 and preparing data:
+
+```bash
+export DATA_DIR="$PWD/data/historical/reproduction"
+export OUT_DIR="$PWD/results/paper-rerun-$(date +%Y%m%d%H%M%S)"
+export SPARK_MASTER=spark://your-master:7077
+DRY_RUN=1 TRIALS=3 bash configs/run_paper_suite.sh fig13
+TRIALS=3 bash configs/run_paper_suite.sh fig4
+TRIALS=3 bash configs/run_paper_suite.sh fig6
+TRIALS=3 bash configs/run_paper_suite.sh fig7
+TRIALS=3 bash configs/run_paper_suite.sh fig11b
+TRIALS=3 bash configs/run_paper_suite.sh fig12
+TRIALS=3 bash configs/run_paper_suite.sh fig13
+bash configs/run_paper_suite.sh fig14
+```
+
+Fig. 11(b) and Fig. 13 create their own frozen state and reuse it across
+all experimental arms. Fig. 14 derives task checks from Fig. 13 rather
+than running again. Fig. 6/7 also include the assembled spatial-operator
+implementation from the released Java source via a separate adapter.
+See `configs/run-commands.md` for all figures, parameter assumptions
+and the distinction between new runs and historical exact timings.
+
 ## Data and results
 
 Raw third-party datasets are not redistributed. Their official sources, preparation steps, and historical processing scripts are described in [`data/README.md`](data/README.md). The CSV files in `results/` contain the reported aggregate values used by the paper; see [`results/README.md`](results/README.md) for their scope.

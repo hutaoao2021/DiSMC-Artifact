@@ -155,6 +155,23 @@ This does not rerandomize the samples or overwrite existing outputs. The supplem
 **Fig. 12 limitation:** `run_paper_suite.sh fig12` currently launches three independent native signal experiments. The paper's Fig. 12 instead **fixes acquired candidates, observed probes, and other information across the three arms**. Holding just probe limits constant is insufficient. Treat those commands as a runnable signal diagnostic, not an exact matched-information reproduction.
 **Crucial correction for Static-Greedy:** it is not enough to set `microSelector=work_greedy` while keeping `microPlannerPolicy=sampled_peak`: the latter still performs online probing. The script instead sets `microPlannerPolicy=peak`, turns off frontier/reuse/refinement, and uses the static greedy selector.
 
-**Source/paper boundaries:** Fig. 6–7 assembled spatial-operator comparator uses a separate entry point not exposed by `run_profile.sh`, so those entries reproduce the listed launcher profiles, not the operator arm. For several 2M/3M mechanism experiments, the public paper reports the dataset-specific medium location `qM` without exact numeric coordinates. The script uses the *published 1M position-control medium position* as an explicitly representative default; override with `MEDIUM_GEOLIFE_X`, `MEDIUM_GEOLIFE_Y`, `MEDIUM_TDRIVE_X`, `MEDIUM_TDRIVE_Y` to use the original values if available. These runs can execute without those historical values, but must not be described as exact numeric replication.
+**Paper parameters and actual execution:** Fig. 6 and Fig. 7 now include the assembled operator arm through the existing SpatialOperatorPipeline and its standalone adapter. See `configs/operator-baseline.md` (source ZIP unchanged). Unlike the historical streaming operator variant, this adapter runs the released source's pipeline with complete exported members. Its new timing must be labeled accordingly.
 
-Fig. 11(b) and Fig. 13 require a common captured frozen state; Fig. 14 reuses Fig. 13 task counts. **The source ZIP now honors independent completion-ID (R) and witness-frontier (W) switches**, as verified by its JDK 8 frozen-replay regression test. However, `run_paper_suite.sh` does not yet capture a single matched state and replay it for Fig. 11(b)/13. Do not treat distinct online runs as those fixed-state experiments, and do not claim matching the historical 192 completed IDs unless the identities have been verified. This batch runner does not claim to have rerun the whole large-scale suite.
+**Medium coordinate qM:** The paper reports the dataset-specific medium point for some 2M/3M controls but does not disclose all those numeric qM values. The runner intentionally defaults to the published 1M medium position (`MEDIUM_GEOLIFE_X/Y`, `MEDIUM_TDRIVE_X/Y`); replace these with measured coordinates if exact correspondence is required. No historical number is fabricated.
+
+**Matched information:** Fig. 12's Unit/Static/Sampled commands run the corresponding code switches with fixed acquisition limits. They are valid controlled runs, but identical candidate/probe IDs have not yet been empirically demonstrated. Do not treat differences as the paper's exact matched-information measurements without comparing their actual identities.
+
+**Frozen controls:** Fig. 11(b) captures one set of inputs/candidate/work/probe information per dataset, then replays it three times each with Joint and Greedy. Fig. 13 likewise captures once and runs all four R/W combinations three times. The source ZIP honors independent R/W controls (JDK 8 regression passed). Fig. 14 is derived from Fig. 13's `*.micro_tasks.csv` (candidate, z-window and distance-check counters) without rerunning Spark.
+
+```bash
+TRIALS=3 bash configs/run_paper_suite.sh fig6
+TRIALS=3 bash configs/run_paper_suite.sh fig7
+TRIALS=3 bash configs/run_paper_suite.sh fig11b
+TRIALS=3 bash configs/run_paper_suite.sh fig12
+TRIALS=3 bash configs/run_paper_suite.sh fig13
+bash configs/run_paper_suite.sh fig14
+```
+
+Use a fresh `OUT_DIR` for any new execution; captures and all replay variants are written with distinct names and SHA-256-guarded state identities. `fig14_checks.csv` and `fig14_checks_means.csv` are derived task-level results (not additional experimental trials).
+
+Fig. 11(b) and Fig. 13 now have capture-once-and-replay script entries; these share SHA-256-protected snapshots and distinguish capture from timed replay runs. Fig. 14 reads those same formal task rows. The published 192 completed-ID count and new source-specific timings are not assumed identical without checking the actual generated output. This is a full runnable *new experiment protocol*, not a claim that the exact historical executable or its timings have been recreated.
