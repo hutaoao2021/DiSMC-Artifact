@@ -26,8 +26,8 @@ Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
 26/11/11 15:50:38 INFO ResourceProfileManager: Added ResourceProfile id: 0
 26/11/11 15:50:38 INFO SecurityManager: Changing view acls to: ${USER}
 26/11/11 15:50:38 INFO SecurityManager: Changing modify acls to: ${USER}
-26/11/11 15:50:38 INFO SecurityManager: Changing view acls groups to: 
-26/11/11 15:50:38 INFO SecurityManager: Changing modify acls groups to: 
+26/11/11 15:50:38 INFO SecurityManager: Changing view acls groups to:
+26/11/11 15:50:38 INFO SecurityManager: Changing modify acls groups to:
 26/11/11 15:50:38 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(${USER}); groups with view permissions: Set(); users  with modify permissions: Set(${USER}); groups with modify permissions: Set()
 26/11/11 15:50:39 INFO Utils: Successfully started service 'sparkDriver' on port 40003.
 26/11/11 15:50:39 INFO SparkEnv: Registering MapOutputTracker
