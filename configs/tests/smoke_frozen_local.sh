@@ -106,8 +106,8 @@ def find(obj, key):
     return None
 def exported(name):
     folder=root/(name+".members")
-    parts=list(sorted(folder.glob("part-*")))
-    assert parts, "No Spark member part files: "+name
+    parts=list(sorted(p for p in folder.rglob("part-*") if p.is_file()))
+    assert parts, "No Spark member part files: {} (found {})".format(name, [str(p.relative_to(folder)) for p in list(folder.rglob("*"))[:20]])
     rows=[]
     for part in parts: rows.extend(part.read_text().splitlines())
     assert rows, "No exported members: "+name
