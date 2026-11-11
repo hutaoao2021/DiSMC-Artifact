@@ -1,0 +1,22 @@
+name: Paper experiment command verification
+on:
+  pull_request:
+    paths:
+      - 'configs/**'
+      - '.github/workflows/paper-commands.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paper-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify shell syntax
+        run: |
+          bash -n configs/run_paper_suite.sh
+          bash -n configs/prepare_paper_subsets.sh
+      - name: Verify parameter matrix without starting expensive Spark jobs
+        run: python3 -m unittest discover -s configs/tests -v
