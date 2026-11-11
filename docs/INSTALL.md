@@ -1,17 +1,14 @@
-# Installation and minimal validation
+# Installation and quick validation
 
-This guide describes the actual build and script interfaces in the packaged `DiSMC-source/` tree. It does not claim that this documentation update reran Spark.
+## Requirements
 
-## 1. Required software
+- JDK 8.
+- Apache Spark 3.2.0 with Scala 2.12.
+- Linux or a compatible Bash environment.
+- Maven is optional. `build.sh` uses Maven when available and otherwise compiles against the Spark JARs.
+- For dataset preprocessing: Python 3, `pyproj`, and GNU `sort`.
 
-- **JDK 8** (the source-release verification used JDK 1.8.0_211).
-- **Apache Spark 3.2.0**, with **Scala 2.12** runtime JARs.
-- A Linux or compatible Bash shell, plus common tools (`find`, `sha256sum`, `jar` and `unzip`).
-- **Maven** is optional: `build.sh` uses `mvn` if found, otherwise `javac` and Spark's bundled JARs.
-
-The scripts assume a POSIX-like filesystem and shell. Cluster deployment additionally requires an accessible Spark master and shared/distributed data locations.
-
-## 2. Check your environment
+## Configure the environment
 
 ```bash
 export JAVA_HOME=/path/to/jdk8
@@ -23,43 +20,37 @@ javac -version
 "$SPARK_HOME/bin/spark-submit" --version
 ```
 
-Confirm that Java reports 1.8 and Spark reports 3.2.0 with Scala 2.12. Make sure `$SPARK_HOME/jars` exists. Resolve setup failures before using the artifact scripts.
+Confirm Java 8 and Spark 3.2.0 / Scala 2.12 before building.
 
-## 3. Extract and build
+## Extract and build
 
-Once the release archive is present at the documented repository path:
+From the repository root:
 
 ```bash
-unzip artifact/DiSMC-source-20261102-release.zip
+unzip artifact/DiSMC-source-release.zip
 cd DiSMC-source
 bash build.sh
 ```
 
-The expected JAR is `target/dismc-unified-1.0.0.jar`. Successful compilation also creates `target/build/provenance.json` containing JAR and Java-source SHA-256 values.
+The build creates `target/dismc-unified-1.0.0.jar`.
 
-The optional Maven path may need access to a Maven repository to download dependencies. The non-Maven path instead uses `$SPARK_HOME/jars/*`.
-
-## 4. Run the selected regression checks
+## Run regression checks
 
 ```bash
 bash scripts/check_selected.sh
 ```
 
-This script compiles test sources and invokes **14 selected Java test classes** with assertions enabled. It covers planner/dependency safety, probe costs, candidate geometry, numerical boundaries and Spark member export. It is not a substitute for end-to-end workload validation.
+This runs the 14 selected Java regression-test entry points included in the source archive.
 
-The bundled `VERIFICATION.json` documents a previous successful verification in the source-release environment; those results must not be misrepresented as independently rerun by this documentation step.
-
-## 5. Run the five-point smoke query
+## Run the smoke query
 
 ```bash
 OUT_DIR="$(mktemp -d)"
-bash scripts/run_small_online.sh "$OUT_DIR/smoke.txt"
+bash scripts/run_small_online.sh "$OUT_DIR/five-point-smoke.txt"
 ```
 
-This script launches `com.DistributedSMC` with `hilbert_full` on Spark `local[2]` and reads `examples/five_points.txt`. It enables member export and observation output. Its query settings and 5% budget are fixture settings, not the paper's full benchmark.
+This runs the bundled five-point example with Spark `local[2]`, a 5% fixture budget, and member export. Use a new output path for every run. This test checks execution and output generation; it is not a reproduction of the paper performance results.
 
-The output path and associated sidecar paths must not already exist. Inspect the main output and any generated `.json`, `.observation.json`, or `.members` outputs. The launcher must finish successfully before interpreting these files.
+## Run on a Spark cluster
 
-## 6. Next steps
-
-For cluster execution, supported profiles and argument order, use [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md). For individual manuscript figures and tables, consult the [experimental settings and figure index](../configs/experiment-settings.md) and the [supplementary document](../supplementary/DiSMC-supplementary-20261110.pdf). Large performance measurements require their recorded input subsets, configurations and resources.
+Set `SPARK_MASTER`, `TOTAL_EXECUTOR_CORES`, `EXECUTOR_CORES`, `EXECUTOR_MEMORY`, and `DRIVER_MEMORY` before using `scripts/run_profile.sh`. Set both `QUERY_X` and `QUERY_Y` to the query coordinates. The launcher syntax and paper workload examples are in [`../configs/run-commands.md`](../configs/run-commands.md).

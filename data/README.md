@@ -1,105 +1,42 @@
-# Datasets and preparation for DiSMC
+# Datasets and preprocessing
 
-This document records the dataset sources and preparation rules in the **final DiSMC supplementary material**, and offers a **new reference converter**. It distinguishes documented historical settings from what the published source package can currently reproduce. The repository **does not redistribute raw trajectory data**.
+Raw GeoLife, TDrive, and Porto data are not redistributed in this repository. Download them from the official sources and follow their dataset terms:
 
-## 1. Official sources
-
-| Dataset | Provider and original form | Official access |
+| Dataset | Source | Input format |
 | --- | --- | --- |
-| **GeoLife** | Microsoft Research Asia; user folders with GPS trajectory `.plt` files (latitude, longitude and other fields after six header lines) | [Microsoft GeoLife download](https://www.microsoft.com/en-us/download/details.aspx?id=52367) |
-| **TDrive** | Microsoft Research Asia; taxi ID, timestamp, longitude, latitude in comma-separated files | [Microsoft T-Drive dataset page](https://www.microsoft.com/en-us/research/publication/t-drive-trajectory-data-sample/) |
-| **Porto** | ECML/PKDD 2015 taxi trajectory challenge; `train.csv` containing a JSON-array `POLYLINE` field with `[longitude,latitude]` pairs | [UCI repository, dataset 339](https://archive.ics.uci.edu/dataset/339/taxi+service+trajectory+prediction+challenge+ecml+pkdd+2015) |
-| **NE / CAS / TS** | Original ESMC benchmark two-dimensional point inputs, used without GeoLife/TDrive/Porto projection | Specific provider URLs and original input hashes **not established from the supplied source archive**; do not fabricate download links |
+| GeoLife | [Microsoft GeoLife](https://www.microsoft.com/en-us/download/details.aspx?id=52367) | ZIP archive containing trajectory `.plt` files |
+| TDrive | [Microsoft T-Drive](https://www.microsoft.com/en-us/research/publication/t-drive-trajectory-data-sample/) | Directory of taxi `.txt` files |
+| Porto | [UCI Taxi Service Trajectory Prediction](https://archive.ics.uci.edu/dataset/339/taxi+service+trajectory+prediction+challenge+ecml+pkdd+2015) | `train.csv` with JSON `POLYLINE` coordinates |
 
-Download data from the providers under their terms. The download packages, versions, raw counts and upstream content can change. The T-Drive public page describes *approximately 15 million* sample points, whereas DiSMC's historical Table I reports **17,662,984 raw records**. These figures must **not** be treated as proof of a matching raw dataset; the upstream release/version and the historical file hash remain to be reconciled before claiming exact input reproduction.
+## Historical preprocessing
 
-## 2. Source-to-prepared conventions (from the supplementary paper)
+The scripts in [`historical/scripts/`](historical/scripts/) were recovered from the experiment data-preparation directory. They are the historical parser and preparation pipeline, not the later reference converter.
 
-| Dataset | Longitude filter | Latitude filter | Target CRS | Frozen sampling seed |
-| --- | --- | --- | --- | ---: |
-| GeoLife | 115–118° E | 39–42° N | EPSG:32650 (UTM zone 50N) | 20260925 |
-| TDrive | 115–118° E | 39–42° N | EPSG:32650 (UTM zone 50N) | 20260924 |
-| Porto | −9.5 to −7.5° | 40.5–42.5° N | EPSG:32629 (UTM zone 29N) | 20260924 |
-
-The historical protocol:
-
-1. Parse original WGS84 coordinates in **longitude/latitude order** after handling each format's source columns.
-2. Keep valid coordinates within the indicated bounding box.
-3. Project to the dataset-specific EPSG coordinate reference system (meters).
-4. Round projected coordinates to **three decimals** (millimeters).
-5. Globally deduplicate coordinate pairs.
-6. Translate every point by subtracting the **global minima** of the respective X and Y coordinates.
-7. Make fixed-seed **shuffled, nested reservoir subsets**; a smaller size is a prefix of the larger frozen sample (e.g. GeoLife 2M and 1M are prefixes of its 3M set).
-
-For the manuscript's full-input rows, the supplement reports GeoLife **24,876,978 raw → 18,355,282 prepared** and TDrive **17,662,984 raw → 11,274,655 prepared**. The ESMC benchmark inputs are reported as NE **123,593 → 118,620**, CAS **196,902 → 124,514**, TS **389,942 → 383,852**. Porto is reported with **17,565,472 prepared** coordinates. These are **reported experimental counts**, not independently rebuilt numbers.
-
-## 3. Required DiSMC program input
-
-The integrated Java source's input readers (e.g. `DistributedSMCGridbaseRebuilt.readAndProcessData`) expect **plain UTF-8 text, one whitespace-separated `x y` pair per line, no header**. Coordinates are in projected-and-translated **meters**, not raw longitude/latitude, and do not carry per-trajectory IDs or timestamps.
-
-Example:
-
-```text
-0.200 0.000
-0.300 0.000
-3.000 0.000
-```
-
-The Java implementation also deduplicates coordinates globally, but that does not replace the offline projection and sampling protocol. For a true multi-node run, put the prepared input at a URI all Spark executors can access.
-
-## 4. Executable **reference** converter
-
-The 2026-11-02 Java release does **not** include the historical trajectory-preparation program. To help readers produce valid `x y` inputs, this repository includes a separate, small reference implementation:
-
-- [`prepare_trajectories.py`](prepare_trajectories.py): GeoLife PLT, TDrive CSV/TXT and Porto `train.csv` parsing; bounding box, CRS, rounding, global deduplication, minima translation, manifest and optional nested sample prefixes.
-- [`test_prepare_trajectories.py`](test_prepare_trajectories.py): synthetic parsing/projection/deduplication tests.
-- [`requirements.txt`](requirements.txt): tested `pyproj` dependency.
-
-**Requirements:** Python 3.10+ (reference script tested using Python 3 and `pyproj 3.7.2`), disk space for a temporary on-disk SQLite deduplication database, and enough RAM for the *largest requested* reservoir sample. Example commands are run from the **repository root**, after extracting provider data:
+Install Python 3, `pyproj`, and GNU `sort`. Example GeoLife command:
 
 ```bash
-python -m pip install -r data/requirements.txt
-python -m unittest discover -s data -p 'test_prepare_trajectories.py' -v
-
-python data/prepare_trajectories.py --dataset geolife \
-  --input /path/to/extracted/Geolife/Data \
-  --output /new/output/geolife-prepared.txt \
-  --seed 20260925 --sample-sizes 100000,200000,400000,600000,800000,1000000,2000000,3000000
-
-python data/prepare_trajectories.py --dataset tdrive \
-  --input /path/to/extracted/TDrive \
-  --output /new/output/tdrive-prepared.txt \
-  --seed 20260924 --sample-sizes 100000,200000,400000,600000,800000,1000000,2000000,3000000
-
-python data/prepare_trajectories.py --dataset porto \
-  --input /path/to/extracted/Porto/train.csv \
-  --output /new/output/porto-prepared.txt \
-  --seed 20260924 --sample-sizes 100000,200000,400000,600000,800000,1000000
+python3 -m pip install pyproj
+python3 data/historical/scripts/prepare_dataset.py \
+  --dataset geolife \
+  --input /path/to/Geolife-Trajectories.zip \
+  --output /path/to/prepared/geolife_xy.txt \
+  --stats /path/to/metadata/geolife_stats.json \
+  --temp-root /path/to/prepared/tmp \
+  --sort-memory 4G --sort-parallelism 4
 ```
 
-Use **fresh output paths**; the converter refuses overwriting the output, manifest or sample files. It produces:
+For TDrive, set `--dataset tdrive` and point `--input` to the extracted taxi-log directory. For Porto, set `--dataset porto` and point `--input` to `train.csv`. Use new output and stats paths.
 
-- `<output>.txt` (the specified main file itself, if its suffix is `.txt`) containing unique X/Y meter coordinates;
-- `<output>.meta.json` containing file counts, data CRS, preprocessing parameters, versions, prepared record counts and SHA-256;
-- `<output>.sample_N.txt` for any requested nested sample sizes.
+The processing order is parsing, coordinate validation and study-area filtering, projection, three-decimal formatting, global `LC_ALL=C sort -u` deduplication, and translation by the global coordinate minima. GeoLife and TDrive use EPSG:32650; Porto uses EPSG:32629. Prepared files contain one projected and translated `x y` pair per line, in meters, with no header.
 
-The reference implementation uses **SQLite global deduplication and lexicographic ordering of millimeter coordinates** before a seeded reservoir and shuffle. It uses Python `round(x*1000)` in integer millimeters. This yields deterministic *reference* outputs under the recorded environment, but the historical ingestion ordering, projection library and rounding tie behavior are **not known**. Consequently the reference samples **are not claimed to have the exact historical IDs, hashes, or counts**. A provided seed does not establish that identity. To reproduce a **published timing number**, the actual prepared data hash and experiment state must also match.
+## Subsets
 
-## 5. Coordinate and provenance check
+`create_subsets.py` implements fixed-seed reservoir sampling for the datasets listed in its `DATASETS` constant. `extend_subsets.py` extends an existing 3M base subset to 5M and 8M. Their arguments and required directory layout are available with `--help`. The recovered GeoLife 1M/3M sampling seed and output hashes are recorded in `historical/metadata/geolife_scale_stats.json`; the exact original GeoLife subset-generation invocation was not recovered, so do not treat a newly generated sample as byte-identical without checking its SHA-256.
 
-Before running a benchmark, record:
+Historical processing counts, seeds, output hashes, and source-file hashes are in [`historical/metadata/`](historical/metadata/) and [`historical/file-provenance.json`](historical/file-provenance.json). Historical Python, pyproj, PROJ, and GNU sort versions were not fully recorded; the repository does not claim byte-identical regeneration under arbitrary current versions.
 
-- Upstream dataset name, official source URL, downloaded archive name/version and SHA-256;
-- exact parser/CRS/projection library and its version, coordinate filter, rounding/deduplication behavior;
-- total records before and after preparation, and prepared file SHA-256;
-- sampler implementation/seed, largest sample size, sample hashes, and whether subsets are prefixes;
-- query coordinates (which must use the same projected/translated frame), radii, k, and acquisition budget.
+## Test the preprocessing scripts
 
-Paper query coordinates are listed in [`configs/fixed-query-coordinates.csv`](../configs/fixed-query-coordinates.csv); they are **not raw GPS longitude/latitude** and should not be reused with a differently translated dataset without checking coordinate-system alignment.
-
-## 6. What remains unverified
-
-- The publicly obtainable upstream files have **not been downloaded and processed as part of this documentation task**.
-- The released integrated Java source lacks the historical dataset preprocessing scripts, raw input hashes and fixed historical reservoir ordering. Therefore, newly generated files are **valid inputs**, not byte-identical copies of the paper's historical inputs.
-- Original source/download links and prepared-input hashes for **NE/CAS/TS** are not established from the provided material. If the original ESMC inputs are already available, use their existing whitespace-separated planar `x y` files; do not run the Beijing/Porto geographic projection.
-- No private trajectory logs, usernames, server paths or third-party raw data should be committed to the repository.
+```bash
+python3 -m unittest discover -s data/historical/tests -v
+```
