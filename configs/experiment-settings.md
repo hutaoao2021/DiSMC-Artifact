@@ -1,6 +1,6 @@
 # Experimental settings and scope registry
 
-**Source of this registry:** the final 2026-11-10 DiSMC main paper and its 18-page supplement (especially the *Unified workload and acquisition registry*), cross-checked with the 2026-11-02 integrated Java/Spark source. These are **reported experimental conditions**, not a claim that every historical large-scale run has been reproduced with this source release.
+Parameters and evaluation scope are transcribed from the DiSMC paper and supplementary experiment registry. This table documents reported conditions and does not assert that every original large-scale run was recreated.
 
 ## Common environment and interpretation
 
@@ -11,12 +11,6 @@
 - **Complete online E2E** includes acquisition/probing/planning/routing/formal execution/reduction/member output according to the paper protocol. **Frozen-state replay** excludes capture/reconstruction; **component diagnostics** are not whole-query E2E. These timings should never be pooled.
 - The budget counts **additional task-input record assignments relative to the initial owner input population** (`B = floor(fraction × R0)`). It is not a network-byte or peak-RAM budget.
 - Do **not** assume all runs used 5%: full-data runs used **10%**, while selected frozen-state controls use a fixed acquired plan.
-
-## Reading this experiment index
-
-The matrix below also serves as the manuscript's figure/table navigation index. **Overall efficiency:** Fig. 4 (same-resource DiSMC vs Static-Greedy), Fig. 5 (stage decomposition of those same runs), and Fig. 6–8 (distributed comparators, spatial-position robustness, and single-threaded ESMC scale-out). **Scalability and full data:** Fig. 9 and Table I. **Mechanism studies:** Fig. 10 (input organization), Fig. 11 (calibration and frozen-state selector replay), Fig. 12 (matched work signals), and Fig. 13–14 (probe-reuse E2E and task-level computation). This index describes *reported measurements*, not fresh reruns.
-
-**Interpretation:** complete online E2E, fixed-state replay, and component-only measurements use different accounting boundaries; additional task-input record assignments are not network bytes or time. Budget fractions must be read from each experiment, not assumed to be globally 5%.
 
 ## Main-paper figure/table matrix
 
