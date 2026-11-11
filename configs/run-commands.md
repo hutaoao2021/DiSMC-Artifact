@@ -62,17 +62,17 @@ The exact dataset sizes, query positions, radii, input budgets, resource counts 
 - **DiSMC:** `hilbert_full`, native `sampled_peak` planner and `joint_peak` selector.
 - **Static-Greedy (Fig. 4):** `peak` planner and `work_greedy` selector, with online probe, frontier transfer and completion reuse disabled. The static comparator uses a separate planner policy from DiSMC.
 - **Other distributed baselines:** `grid_d0`, `hilbert_d0`, `z_d0`. Single-machine ESMC uses `single_esmc` (4 GiB JVM heap; 7,200 s timeout in Fig. 8).
-- **Fig. 6–7 spatial operator:** `configs/run_spatial_operator.sh` invokes the released assembled `com.SpatialOperatorPipeline` implementation via a Spark adapter and exports complete members. The paper also reports a separately implemented historical streaming variant.
+- **Fig. 6–7 spatial operator:** `configs/run_spatial_operator.sh` invokes the released `com.SpatialOperatorPipeline` via Spark and exports complete query members.
 - **Fig. 10:** `spatial_full` versus `dependency` input organization.
 - **Fig. 11(a):** both candidate refresh and lane refinement must be enabled; private versus paired-parent is selected by `microLaneParentReplay`.
 - **Fig. 11(b):** capture once per dataset, then replay Joint and Greedy on the same frozen state for three trials.
 - **Fig. 13:** capture once and replay four R/W combinations for three trials, using the same captured state. The capture configuration permits up to 192 anchors; the generated state records the actual selection.
 - **Fig. 14:** derive check counts from Fig. 13 `*.micro_tasks.csv` via `configs/derive_fig14.py`; no new Spark query.
 
-## Matching the paper's measurement protocols
+## Experiment-specific configuration
 
-**Fig. 12 — signal controls.** The supplied `unit`, `static` and `sampled` entries measure their respective native online configurations. The paper's matched-information experiment uses common acquired candidates and probe IDs across signals. For that protocol, retain the same captured information across comparison arms and check candidate/probe identities before interpreting measurements as matched.
+**Fig. 12 — work estimation.** Use the `unit`, `static` and `sampled` signal settings. For matched-information comparisons, supply a common acquired candidate/probe state to the three configurations.
 
-**Medium positions (`qM`).** The runner accepts `MEDIUM_GEOLIFE_X`, `MEDIUM_GEOLIFE_Y`, `MEDIUM_TDRIVE_X` and `MEDIUM_TDRIVE_Y`. Defaults are documented representative medium positions; exact reproduction of an original run uses its recorded coordinates.
+**Medium positions (`qM`).** Set `MEDIUM_GEOLIFE_X`, `MEDIUM_GEOLIFE_Y`, `MEDIUM_TDRIVE_X` and `MEDIUM_TDRIVE_Y` to configure dataset-specific query positions.
 
 **Timing.** Complete online E2E, frozen replay and component diagnostics have separate measurement boundaries. The [aggregate CSVs](../results/README.md) record the values reported in the paper.

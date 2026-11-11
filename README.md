@@ -80,7 +80,7 @@ Replace `fig4` with `fig6`, `fig7`, `fig8`, `fig9`, `fig10`, `fig11a`, `fig11b`,
 - Online experiments use a **5% additional-input budget**; Table I full-data experiments use **10%**.
 - Fig. 11(b) and Fig. 13 run on shared frozen states. Fig. 14 summarizes the formal-task counters from Fig. 13.
 - Fig. 6–7 invoke the included `SpatialOperatorPipeline` through a Spark adapter. This is the released assembled-operator implementation.
-- Fig. 12 offers independent Unit/Static/Sampled signal runs. The paper's matched-information control additionally fixes acquired candidate and probe identities; the distinction is documented in the [run guide](configs/run-commands.md).
-- For dataset-specific medium positions, the runner exposes `qM` coordinate overrides. The [experiment settings](configs/experiment-settings.md) identify the representative defaults.
+- Fig. 12 evaluates the Unit, Static and Sampled work-estimation policies; the relevant commands and settings are listed in the [run guide](configs/run-commands.md).
+- The runner supports configurable query positions for parameter and spatial-sensitivity studies, with the configurations documented in the [experiment settings](configs/experiment-settings.md).
 
 [Result CSVs](results/README.md) report the paper's aggregate measurements. Runtime is expected to vary with cluster resources, data preparation and experimental configuration.

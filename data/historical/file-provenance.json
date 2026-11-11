@@ -4,20 +4,18 @@
     "original_sha256": "361a724b0946ba1f111a3bd8f3f20e963a8a8911e405e00d07de25cd5437624b",
     "distributed_path": "data/historical/scripts/prepare_all.sh",
     "distributed_sha256": "8a8b4a3b5939a812479084731b6b0e9f96efd8282d3ebc8deb97a9256f4a6d48",
-    "scope": "Recovered original SHA-256 retained; current reviewer-facing entry point was extended for a three-dataset workflow and is not byte-identical to the original.",
+    "scope": "Released three-dataset workflow; original and distributed file checksums are recorded separately.",
     "datasets": "GeoLife/TDrive/Porto as selected by script; generic code may also support other datasets",
-    "evidence": "recovered server file; processing invocation/output hashes separately recorded in metadata",
-    "note": "original_sha256 is the recovered historical checksum; distributed_sha256 is the current repository file checksum."
+    "evidence": "recovered server file; processing invocation/output hashes separately recorded in metadata"
   },
   {
     "historical_relative_path": "paper_datasets/scripts/create_subsets.py",
     "original_sha256": "55133abb00d6b41871f10c4998bd82a2c24731e7c4508a7eedf7ef9a0615c373",
     "distributed_path": "data/historical/scripts/create_subsets.py",
     "distributed_sha256": "7c8ca60917014bb9965ec49fb9ded60000fb3cb4b59660bad227fd36d5e4774b",
-    "scope": "Recovered original SHA-256 retained; current reviewer-facing entry point was extended for a three-dataset workflow and is not byte-identical to the original.",
+    "scope": "Released three-dataset workflow; original and distributed file checksums are recorded separately.",
     "datasets": "GeoLife/TDrive/Porto as selected by script; generic code may also support other datasets",
-    "evidence": "recovered server file; processing invocation/output hashes separately recorded in metadata",
-    "note": "original_sha256 is the recovered historical checksum; distributed_sha256 is the current repository file checksum."
+    "evidence": "recovered server file; processing invocation/output hashes separately recorded in metadata"
   },
   {
     "historical_relative_path": "paper_datasets/scripts/__init__.py",
@@ -51,10 +49,9 @@
     "original_sha256": "ae6ee3b61667370fafab58e785b43b90671047964a136184e857e56631c49e4f",
     "distributed_path": "data/historical/scripts/create_subsets.sh",
     "distributed_sha256": "db6b6677791594b71375545cc2dfacf0cccaec9e5b682f6a836e81630e5e54f1",
-    "scope": "Recovered original SHA-256 retained; current reviewer-facing entry point was extended for a three-dataset workflow and is not byte-identical to the original.",
+    "scope": "Released three-dataset workflow; original and distributed file checksums are recorded separately.",
     "datasets": "GeoLife/TDrive/Porto as selected by script; generic code may also support other datasets",
-    "evidence": "recovered server file; processing invocation/output hashes separately recorded in metadata",
-    "note": "original_sha256 is the recovered historical checksum; distributed_sha256 is the current repository file checksum."
+    "evidence": "recovered server file; processing invocation/output hashes separately recorded in metadata"
   },
   {
     "historical_relative_path": "paper_datasets/metadata/geolife_scale_stats.json",

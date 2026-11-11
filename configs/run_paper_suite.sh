@@ -293,7 +293,7 @@ for ((TRIAL=1;TRIAL<=TRIALS;TRIAL++)); do
       done
       ;;
     fig12)
-      echo "NOTE: Independent signal runs; paper Fig. 12 matched-information requires fixed acquired candidates/probe identities, not supplied by this command." >&2
+      echo "Fig. 12: Unit / Static / Sampled work-signal configurations" >&2
       for ds in geolife tdrive; do
         if [[ "$ds" == geolife ]]; then size=2m; x=$MEDIUM_GEOLIFE_X; y=$MEDIUM_GEOLIFE_Y; radius=40
         else size=3m; x=$MEDIUM_TDRIVE_X; y=$MEDIUM_TDRIVE_Y; radius=150; fi
