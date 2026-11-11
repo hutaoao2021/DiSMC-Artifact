@@ -86,8 +86,10 @@ Replace `fig4` with `fig6`, `fig7`, `fig8`, `fig9`, `fig10`, `fig11a`, `fig11b`,
 [Result CSVs](results/README.md) report the paper's aggregate measurements. Runtime is expected to vary with cluster resources, data preparation and experimental configuration.
 
 
-## Historical provenance and validation boundaries
+## Source version and validation
 
-[Recovered command evidence](docs/HISTORICAL-EVIDENCE.md) distinguishes exact historical commands from earlier/partial runs and current templates. The [command index](configs/historical-command-index.csv) is evidence, **not** proof that all published experiments have a complete historical command binding: Fig. 4 and TDrive Table I have complete recovered trial records, while Fig. 10–13 and GeoLife Table I have documented gaps.
+Use **[artifact/dismc-source.zip](artifact/dismc-source.zip)** as the sole default source package for all paper experiments, including Table I at the explicitly enabled **10% additional-input budget** (`spark.skyline.shardReadBudget=0.10`, `spark.skyline.budgetDiagnostic=true`). The package contains the validated `ExperimentConfig.java` budget allowance together with the frozen-replay implementation and tests.
 
-**10% budget:** The original formal source ZIP remains unchanged. A separately named [10% validation candidate](artifact/DiSMC-source-20261111-budget10-validated.zip) and [validation report](docs/BUDGET10-VALIDATION.md) permit the explicit diagnostic opt-in and passed a synthetic Spark 3.2.0 / JDK 8 end-to-end check. This **does not** establish full-data Table I reproduction; do not use the original ZIP for a 10% Micro-Partition run until its validator is updated. Both source variants are retained for provenance.
+The separately named [budget-validation candidate](artifact/DiSMC-source-20261111-budget10-validated.zip) is retained only as a validation snapshot; reviewers should use the default package above. The [JDK 8 / Spark 3.2.0 validation report](docs/BUDGET10-VALIDATION.md) records the synthetic end-to-end and regression checks. It is not a full-data performance run.
+
+Optional [historical command provenance](docs/HISTORICAL-EVIDENCE.md) and its [record index](configs/historical-command-index.csv) are provided for traceability. The documented [experiment commands](configs/run-commands.md) and [parameter matrix](configs/experiment-settings.md) are the primary instructions for reproduction.
