@@ -24,6 +24,13 @@ run_one() {
   local input output profile mode budget signal planner selector frontier lane refresh reuse
   if [[ "$size" == full ]]; then input="$DATA_DIR/${ds}_xy.txt"
   else input="$DATA_DIR/${ds}_${size}_xy.txt"; fi
+  # Also accept the fresh preparation workspace without copying GB-scale files.
+  if [[ ! -f "$input" ]]; then
+    local candidate
+    if [[ "$size" == full ]]; then candidate="$DATA_DIR/prepared/${ds}_xy.txt"
+    else candidate="$DATA_DIR/subsets/${ds}_${size}_xy.txt"; fi
+    [[ ! -f "$candidate" ]] || input="$candidate"
+  fi
   output="$OUT_DIR/$figure/${ds}_${size}_${label}_${method}_trial${TRIAL}.txt"
   if [[ "$DRY_RUN" != 1 ]]; then
     [[ -f "$input" ]] || { echo "Missing input: $input" >&2; exit 2; }

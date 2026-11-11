@@ -1,0 +1,33 @@
+name: Dataset preprocessing smoke tests
+on:
+  pull_request:
+    paths:
+      - 'data/historical/scripts/**'
+      - 'data/historical/tests/**'
+      - 'data/README.md'
+      - 'configs/run_paper_suite.sh'
+      - '.github/workflows/dataset-prep.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-preprocessing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python3 -m pip install pyproj
+      - name: Syntax checks
+        run: |
+          bash -n data/historical/scripts/prepare_all.sh
+          bash -n data/historical/scripts/create_subsets.sh
+          bash -n configs/run_paper_suite.sh
+          python3 -m py_compile data/historical/scripts/create_subsets.py
+      - name: Real adapter and entry point tests
+        working-directory: data/historical
+        run: python3 -m unittest discover -s tests -v
