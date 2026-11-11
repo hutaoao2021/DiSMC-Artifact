@@ -1,79 +1,86 @@
-# DiSMC Research Artifact
+# DiSMC — Research Artifact
 
 **DiSMC: Dependency-Complete Planning for Distributed Skyline Micro-Cluster Queries**
 
-This repository provides the Java/Spark implementation, build and run instructions, dataset preparation scripts, experiment settings, reported result tables, and supplementary material for the DiSMC paper.
+This repository contains the Java/Spark implementation, data-preparation scripts, experiment commands, reported aggregate results, and supplementary material.
 
-## Contents
+## Repository contents
 
-| Path | Contents |
+| Path | Purpose |
 | --- | --- |
-| [`artifact/DiSMC-source-release.zip`](artifact/DiSMC-source-release.zip) | Integrated Java/Spark source, tests, launch scripts, and the validated 10% Micro-Partition budget compatibility fix |
-| [`docs/INSTALL.md`](docs/INSTALL.md) | Software requirements, build, tests, and smoke run |
-| [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Execution profiles and reproduction scope |
-| [`configs/experiment-settings.md`](configs/experiment-settings.md) | Dataset sizes, queries, radii, budgets, and experiment protocols |
-| [`configs/run-commands.md`](configs/run-commands.md) | Copyable commands for build, smoke, distributed execution, baselines, and ablations |
-| [`configs/fixed-query-coordinates.csv`](configs/fixed-query-coordinates.csv) | Fixed query coordinates used by the evaluation |
-| [`data/README.md`](data/README.md) | Dataset sources, historical preprocessing scripts, and input format |
-| [`results/README.md`](results/README.md) | Result CSV descriptions and metric definitions |
-| [`supplementary/DiSMC-supplementary-20261110.pdf`](supplementary/DiSMC-supplementary-20261110.pdf) | Supplementary proofs, protocols, and additional experiments |
+| [Source release](artifact/DiSMC-source-release.zip) | Complete Java source, build scripts and selected tests |
+| [Data preparation](data/README.md) | Official GeoLife, TDrive and Porto sources; preprocessing and fixed-seed sampling |
+| [Run instructions](configs/run-commands.md) | Shell commands for the paper's figures and Table I |
+| [Experiment settings](configs/experiment-settings.md) | Exact reported datasets, query parameters, budgets, resource configuration and measurement scope |
+| [Fixed queries](configs/fixed-query-coordinates.csv) | Recorded query positions |
+| [Reported results](results/README.md) | CSV aggregates and metric definitions |
+| [Supplement](supplementary/DiSMC-supplementary-20261110.pdf) | Additional protocols, results and proofs |
 
-## Quick start
+Raw third-party data are **not** redistributed; download them from their original providers.
 
-Requirements: JDK 8, Apache Spark 3.2.0 with Scala 2.12, and Bash. From the repository root:
+## 1. Build and run a small query
+
+Requirements: **Linux/Bash, JDK 8, Apache Spark 3.2.0 (Scala 2.12)**. Maven is supported; the source build script can otherwise use Spark's JARs.
+
+From the repository root:
 
 ```bash
-unzip artifact/DiSMC-source-release.zip
-cd DiSMC-source
 export JAVA_HOME=/path/to/jdk8
 export PATH="$JAVA_HOME/bin:$PATH"
 export SPARK_HOME=/path/to/spark-3.2.0
 
-bash build.sh
-bash scripts/check_selected.sh
+unzip artifact/DiSMC-source-release.zip
+(cd DiSMC-source && bash build.sh && bash scripts/check_selected.sh)
 
-OUT_DIR="$(mktemp -d)"
-bash scripts/run_small_online.sh "$OUT_DIR/smoke.txt"
+OUT="$(mktemp -d)"
+(cd DiSMC-source && bash scripts/run_small_online.sh "$OUT/smoke.txt")
 ```
 
-The five-point smoke run checks that the packaged application launches and exports members. It is a functionality check, not a paper-scale performance benchmark.
+The last command executes a bundled five-point query on Spark `local[2]` and exports the result and member records. It is a functional smoke test, **not** a paper-scale benchmark.
 
-## Run the paper methods
+## 2. Prepare the datasets
 
-Start with [`configs/run-commands.md`](configs/run-commands.md). It documents the distributed launcher, query and data parameters, the `joint_peak` and `work_greedy` selector settings, baseline profiles, and the 5%/10% budget options. Use [`configs/experiment-settings.md`](configs/experiment-settings.md) for the dataset and query settings associated with each figure and table.
-
-For the Micro-Partition path, the default additional-input budget is 1%. The release supports explicit 5% and 10% diagnostic budgets with `spark.skyline.budgetDiagnostic=true` and `spark.skyline.shardReadBudget=0.05` or `0.10`.
-
-## Run the published parameter matrix
-
-From the repository root after extracting/building the release source,
-setting JDK 8 / Spark 3.2.0 and preparing data:
+Install Python 3, `pyproj` and GNU `sort`. Follow [data/README.md](data/README.md) for official downloads, and set the paths to the downloaded files:
 
 ```bash
-export DATA_DIR="$PWD/data/historical/reproduction"
-export OUT_DIR="$PWD/results/paper-rerun-$(date +%Y%m%d%H%M%S)"
-export SPARK_MASTER=spark://your-master:7077
-DRY_RUN=1 TRIALS=3 bash configs/run_paper_suite.sh fig13
-TRIALS=3 bash configs/run_paper_suite.sh fig4
-TRIALS=3 bash configs/run_paper_suite.sh fig6
-TRIALS=3 bash configs/run_paper_suite.sh fig7
-TRIALS=3 bash configs/run_paper_suite.sh fig11b
-TRIALS=3 bash configs/run_paper_suite.sh fig12
-TRIALS=3 bash configs/run_paper_suite.sh fig13
-bash configs/run_paper_suite.sh fig14
+export GEOLIFE_INPUT="/path/to/Geolife Trajectories 1.3.zip"
+export TDRIVE_INPUT="/path/to/tdrive/taxi_log_2008_by_id"
+export PORTO_INPUT="/path/to/porto/train.csv"
+export WORK_ROOT="$PWD/data/historical/reproduction"
+
+bash data/historical/scripts/prepare_all.sh
+bash data/historical/scripts/create_subsets.sh
+DATA_DIR="$WORK_ROOT" bash configs/prepare_paper_subsets.sh
 ```
 
-Fig. 11(b) and Fig. 13 create their own frozen state and reuse it across
-all experimental arms. Fig. 14 derives task checks from Fig. 13 rather
-than running again. Fig. 6/7 also include the assembled spatial-operator
-implementation from the released Java source via a separate adapter.
-See `configs/run-commands.md` for all figures, parameter assumptions
-and the distinction between new runs and historical exact timings.
+Outputs are created under `$WORK_ROOT/prepared/`, `subsets/` and `metadata/`. The scripts reject existing output paths and preserve the supplied historical metadata. GeoLife uses seed `20260925`; TDrive and Porto use `20260924`.
 
-## Data and results
+## 3. Reproduce paper experiments
 
-Raw third-party datasets are not redistributed. Their official sources, preparation steps, and historical processing scripts are described in [`data/README.md`](data/README.md). The CSV files in `results/` contain the reported aggregate values used by the paper; see [`results/README.md`](results/README.md) for their scope.
+From the repository root after the build and data preparation:
 
-## Reproduction scope
+```bash
+export SPARK_MASTER=spark://your-master:7077
+export DATA_DIR="$PWD/data/historical/reproduction"
+export OUT_DIR="$PWD/results/reproduction-$(date +%Y%m%d-%H%M%S)"
+export TOTAL_EXECUTOR_CORES=40
+export EXECUTOR_CORES=4
+export EXECUTOR_MEMORY=4G
+export DRIVER_MEMORY=8G
 
-The source archive includes build scripts, selected regression tests, and a small end-to-end example. Large-scale paper timings were collected with their recorded data, configuration, and execution environment; the release does not claim that the entire performance suite has been rerun with this packaged source. The run instructions explain how to execute the methods and how to configure the reported workloads.
+DRY_RUN=1 TRIALS=3 bash configs/run_paper_suite.sh fig4
+TRIALS=3 bash configs/run_paper_suite.sh fig4
+TRIALS=3 bash configs/run_paper_suite.sh table1
+```
+
+Replace `fig4` with `fig6`, `fig7`, `fig8`, `fig9`, `fig10`, `fig11a`, `fig11b`, `fig12` or `fig13`. `fig5` uses Fig. 4 stage metrics rather than a new query; `fig14` summarizes Fig. 13 formal-task counters. Use **fresh output paths**. See [the command guide](configs/run-commands.md) and [experiment matrix](configs/experiment-settings.md) for the specific controls.
+
+## Scope and interpretation
+
+- The standard online experiments use a **5% additional-input budget**; Table I full-data experiments use **10%**, with the diagnostic budget flag enabled.
+- Fig. 11(b) and Fig. 13 capture a frozen state and replay it across alternatives. Capture and replay timing boundaries differ.
+- The Fig. 6–7 spatial-operator adapter invokes the released implementation, not an unpublished historical streaming binary.
+- The current Fig. 12 command runs independent Unit/Static/Sampled configurations; it is **not** a verified matched-information replay. Some `qM` settings use explicitly identified representative coordinates where the paper did not publish numeric values.
+- [Reported result CSVs](results/README.md) are historical aggregates, not new measurements generated by packaging the repository. Running the large-scale suite on a new cluster does not guarantee identical timings.
+
+The source ZIP and reported results are unchanged by the submission-oriented documentation cleanup.

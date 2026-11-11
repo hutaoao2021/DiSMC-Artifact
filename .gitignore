@@ -22,3 +22,8 @@ data/processed/
 data/historical/raw/
 data/historical/reproduction/
 configs/target/
+
+# Reviewer working files created by README commands
+DiSMC-source/
+results/reproduction-*/
+results/paper-rerun*/
