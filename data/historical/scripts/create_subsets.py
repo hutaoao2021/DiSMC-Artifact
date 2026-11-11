@@ -9,7 +9,9 @@ from pathlib import Path
 
 
 DEFAULT_SEED = 20260924
-DATASETS = ("geonames", "tdrive", "porto")
+GEOLIFE_SEED = 20260925
+DATASETS = ("geolife", "tdrive", "porto")
+AVAILABLE_DATASETS = ("geolife", "geonames", "tdrive", "porto")
 
 
 def _write_lines_atomic(path, lines):
@@ -74,17 +76,23 @@ def create_nested_subsets(source, small_output, large_output, small_size, large_
 
 def main():
     parser = argparse.ArgumentParser(description="Create reproducible nested point subsets")
-    parser.add_argument("--root", default=Path(__file__).resolve().parents[1], type=Path)
+    parser.add_argument("--root", default=Path(__file__).resolve().parents[1] / "reproduction", type=Path)
+    parser.add_argument("--datasets", nargs="+", choices=AVAILABLE_DATASETS, default=list(DATASETS))
     parser.add_argument("--small-size", default=1_000_000, type=int)
     parser.add_argument("--large-size", default=3_000_000, type=int)
     parser.add_argument("--seed", default=DEFAULT_SEED, type=int)
+    parser.add_argument("--geolife-seed", default=GEOLIFE_SEED, type=int)
     options = parser.parse_args()
+    if not 0 < options.small_size <= options.large_size:
+        parser.error("subset sizes must satisfy 0 < small <= large")
+    if len(set(options.datasets)) != len(options.datasets):
+        parser.error("duplicate dataset names are not allowed")
 
     root = options.root.resolve()
     subset_directory = root / "subsets"
     stats_path = root / "metadata" / "subsets_stats.json"
     expected_outputs = [stats_path]
-    for dataset in DATASETS:
+    for dataset in options.datasets:
         expected_outputs.extend([
             subset_directory / "{}_1m_xy.txt".format(dataset),
             subset_directory / "{}_3m_xy.txt".format(dataset),
@@ -93,20 +101,30 @@ def main():
     if existing:
         parser.error("refusing to overwrite existing files: " + ", ".join(existing))
 
+    missing = [
+        str(root / "prepared" / "{}_xy.txt".format(dataset))
+        for dataset in options.datasets
+        if not (root / "prepared" / "{}_xy.txt".format(dataset)).is_file()
+    ]
+    if missing:
+        parser.error("missing prepared inputs: " + ", ".join(missing))
+
     statistics = {
         "method": "fixed-seed reservoir sampling; 1M is nested within 3M",
         "seed": options.seed,
+        "geolife_seed": options.geolife_seed,
         "datasets": {},
     }
-    for dataset in DATASETS:
-        print("sampling dataset={}".format(dataset), flush=True)
+    for dataset in options.datasets:
+        dataset_seed = options.geolife_seed if dataset == "geolife" else options.seed
+        print("sampling dataset={} seed={}".format(dataset, dataset_seed), flush=True)
         statistics["datasets"][dataset] = create_nested_subsets(
             root / "prepared" / "{}_xy.txt".format(dataset),
             subset_directory / "{}_1m_xy.txt".format(dataset),
             subset_directory / "{}_3m_xy.txt".format(dataset),
             options.small_size,
             options.large_size,
-            options.seed,
+            dataset_seed,
         )
 
     stats_path.parent.mkdir(parents=True, exist_ok=True)
