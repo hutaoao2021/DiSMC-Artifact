@@ -40,6 +40,16 @@ run_one() {
   fi
   profile=$method
   [[ "$method" == dismc || "$method" == static ]] && profile=hilbert_full
+  if [[ "$method" == operator ]]; then
+    local -a op=(bash "$ROOT/configs/run_spatial_operator.sh" "$input" "$output" 200 "$radius" 2 "$x" "$y")
+    if [[ "$DRY_RUN" == 1 ]]; then
+      printf 'QUERY_X=%q QUERY_Y=%q TOTAL_EXECUTOR_CORES=%q DRIVER_MEMORY=%q ' "$x" "$y" "${TOTAL_EXECUTOR_CORES:-40}" "$DRIVER_MEMORY"
+      printf '%q ' "${op[@]}"; echo
+    else
+      "${op[@]}"
+    fi
+    return
+  fi
   local -a cmd=(bash "$SRC/scripts/run_profile.sh" "$profile" "$input" "$output" 200 "$radius" 2 1)
   if [[ "$profile" == hilbert_full ]]; then
     mode=${MODE:-dependency}; budget=${BUDGET:-0.05}; signal=${SIGNAL:-sampled}
@@ -126,25 +136,22 @@ for ((TRIAL=1;TRIAL<=TRIALS;TRIAL++)); do
       ;;
     fig5) echo "Fig. 5 uses Fig. 4 stage metrics; no additional execution"; exit 0 ;;
     fig6)
-      echo "NOTE: Assembled spatial-operator baseline is not in run_profile.sh; this is a partial suite." >&2
       for spec in "geolife 1m 20" "tdrive 3m 75"; do
         read -r ds size radius <<< "$spec"
-        for method in dismc grid_d0 hilbert_d0 z_d0; do
+        for method in dismc grid_d0 hilbert_d0 z_d0 operator; do
           run_one fig6 "$ds" "$size" external 15 15 "$radius" "$method"
         done
       done
-      echo "Assembled spatial-operator baseline needs its separate entry point." >&2
       ;;
     fig7)
-      echo "NOTE: Assembled spatial-operator baseline is not in run_profile.sh; this covers DiSMC only." >&2
       for spec in \
         "geolife sparse 121585.662 102389.276 20" "geolife medium 122287.250 105282.863 20" \
         "geolife dense 114693.645 108474.258 20" "tdrive sparse 120924.613 114579.245 75" \
         "tdrive medium 106516.154 134723.013 75" "tdrive dense 126175.926 103115.703 75"; do
         read -r ds label x y radius <<< "$spec"
         run_one fig7 "$ds" 1m "$label" "$x" "$y" "$radius" dismc
+        run_one fig7 "$ds" 1m "$label" "$x" "$y" "$radius" operator
       done
-      echo "Operator comparison is not included in this Fig. 7 DiSMC-only entry." >&2
       ;;
     fig8)
       for ds in geolife tdrive porto; do
