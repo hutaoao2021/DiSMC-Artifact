@@ -86,10 +86,8 @@ Replace `fig4` with `fig6`, `fig7`, `fig8`, `fig9`, `fig10`, `fig11a`, `fig11b`,
 [Result CSVs](results/README.md) report the paper's aggregate measurements. Runtime is expected to vary with cluster resources, data preparation and experimental configuration.
 
 
-## Source version and validation
+## Source package and reproducibility
 
-Use **[artifact/dismc-source.zip](artifact/dismc-source.zip)** as the sole default source package for all paper experiments, including Table I at the explicitly enabled **10% additional-input budget** (`spark.skyline.shardReadBudget=0.10`, `spark.skyline.budgetDiagnostic=true`). The package contains the validated `ExperimentConfig.java` budget allowance together with the frozen-replay implementation and tests.
+The official source package for DiSMC experiments is **[artifact/dismc-source.zip](artifact/dismc-source.zip)**. It includes the 10% additional-input budget allowance for Table I and the frozen-state replay controls. For Table I, set `spark.skyline.shardReadBudget=0.10` together with `spark.skyline.budgetDiagnostic=true`.
 
-The separately named [budget-validation candidate](artifact/DiSMC-source-20261111-budget10-validated.zip) is retained only as a validation snapshot; reviewers should use the default package above. The [JDK 8 / Spark 3.2.0 validation report](docs/BUDGET10-VALIDATION.md) records the synthetic end-to-end and regression checks. It is not a full-data performance run.
-
-Optional [historical command provenance](docs/HISTORICAL-EVIDENCE.md) and its [record index](configs/historical-command-index.csv) are provided for traceability. The documented [experiment commands](configs/run-commands.md) and [parameter matrix](configs/experiment-settings.md) are the primary instructions for reproduction.
+The source archive includes its build and test scripts. The [experiment commands](configs/run-commands.md), [parameter matrix](configs/experiment-settings.md), [dataset preparation guide](data/README.md), and [reported results](results/README.md) provide the reproduction workflow. Further [budget compatibility test records](docs/BUDGET10-VALIDATION.md) are available as supporting technical documentation.

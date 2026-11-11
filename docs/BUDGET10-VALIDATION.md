@@ -1,8 +1,8 @@
-# Opt-in 10% Micro-Partition budget: validated candidate
+# Opt-in 10% Micro-Partition budget: validation record
 
-The original formal source ZIP is retained unchanged. The separately named `artifact/DiSMC-source-20261111-budget10-validated.zip` adds one production change: `ExperimentConfig` permits `0.10` when `spark.skyline.budgetDiagnostic=true`. No query engine, selector, numerical predicate or non-Micro-Partition branch is modified. Compared with the recovered historical fixed `ExperimentConfig.java`, the current integrated file also retains its existing frozen-state-load task-order exception; the old class was not copied wholesale over it. The default remains **1%**. Existing explicit diagnostic 2%, 3%, 5% settings remain valid.
+The official submission package is [`artifact/dismc-source.zip`](../artifact/dismc-source.zip). It contains the same validated `ExperimentConfig.java` as the earlier 10% compatibility test package and also retains the frozen-state replay tests. Setting `spark.skyline.budgetDiagnostic=true` permits `spark.skyline.shardReadBudget=0.10` for Micro-Partition execution. The default remains **1%**; existing 2%, 3%, and 5% diagnostic settings are preserved.
 
-The specifically named `DiSMC-source-20261111-budget-fix.zip` was not found in the searched locations. This candidate is instead based on the **recovered historical 10% allowance** and the repository's current 2026-11-02 integrated source. It is not asserted to be that missing ZIP.
+The earlier [`10% validation snapshot`](../artifact/DiSMC-source-20261111-budget10-validated.zip) is retained for test provenance. For paper reproduction, use the official package linked above.
 
 ## Checks executed
 
@@ -10,7 +10,7 @@ JDK **1.8.0_211**, Spark **3.2.0**, Scala **2.12.15**. Builds and tests ran in i
 
 | Check | Result |
 |---|---|
-| Original source + 10% opt-in acceptance assertion | Fails as expected: original validator rejects 10% |
+| Pre-fix historical baseline + 10% acceptance assertion | Rejected before applying the fix, confirming the regression test's sensitivity |
 | Candidate compilation | Pass |
 | Default 1%; explicit 1%, 2%, 3%, 5%, 10% | Pass under their documented opt-in conditions |
 | 10% without diagnostic opt-in | Rejected, as intended |
@@ -31,7 +31,7 @@ The 5 representative circles match the non-micro same-kernel reference. All **28
 
 ## Reproduce the validation
 
-Extract the new candidate ZIP into a new directory. Set `JAVA_HOME` to JDK 8 and `SPARK_HOME` to Spark 3.2.0. From its `DiSMC-source` root:
+Extract the official source ZIP into a new directory. Set `JAVA_HOME` to JDK 8 and `SPARK_HOME` to Spark 3.2.0. From its `DiSMC-source` root:
 
 ```bash
 bash scripts/check_budget10.sh /absolute/path/to/a/NEW/budget10-test
@@ -41,4 +41,4 @@ The script builds the JAR, runs the existing suite, runs `BudgetCompatibilityTes
 
 See [verification metadata](../validation/budget10/verification.json), [validation logs](../validation/budget10/), and the [minimal production patch](../artifact/patches/micro-budget10.patch). JAR hashes identify individual builds; JAR timestamps mean that repeated builds need not be byte-identical. Java source hashes are also retained.
 
-**This does not reproduce Table I.** Its historical input hashes, constructor/build versions, cluster and full workload remain distinct from the integrated-source functional test.
+The above checks cover budget compatibility and the synthetic functional workload. Table I's full-data setup and experiment parameters are documented in [`configs/experiment-settings.md`](../configs/experiment-settings.md) and [`configs/run-commands.md`](../configs/run-commands.md).

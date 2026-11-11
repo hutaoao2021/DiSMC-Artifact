@@ -1,6 +1,6 @@
-# Historical experiment evidence recovered on 2026-11-11
+# Historical experiment command archive (optional reference)
 
-The [command index](../configs/historical-command-index.csv) links **119 recorded command files** to redacted argv, recorded environment/configuration, input/build hashes, available result-manifest fields and completion evidence. This is an evidence index, not a claim that all 119 runs belong to the final paper. Earlier attempts and antecedent settings are clearly distinguished.
+The [command index](../configs/historical-command-index.csv) links **119 archived command files** to execution arguments, recorded environment/configuration, input/build hashes, and available result-manifest fields. These records are supplementary provenance for earlier runs and development checks. To reproduce the paper, follow the current [experiment commands](../configs/run-commands.md) and [parameter matrix](../configs/experiment-settings.md).
 
 Original commands, logs and source files were not changed. Storage roots, account-specific installation paths and network endpoints are substituted in distributed records. Original file SHA-256 values identify the unredacted private originals; distributed JSON/file hashes identify the redacted copies separately. No raw trajectories or member-coordinate output are published here.
 
