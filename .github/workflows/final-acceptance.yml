@@ -1,0 +1,55 @@
+name: Final artifact Spark acceptance
+on:
+  pull_request:
+    paths:
+      - 'configs/tests/smoke_frozen_local.sh'
+      - '.github/workflows/final-acceptance.yml'
+      - 'artifact/DiSMC-source-release.zip'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actual-spark-frozen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+      - name: Build integrated JDK 8 Spark 3.2.0 source
+        run: |
+          set -euo pipefail
+          unzip -tq artifact/DiSMC-source-release.zip
+          unzip -q artifact/DiSMC-source-release.zip
+          mvn -B -q -f DiSMC-source/pom.xml -DskipTests package
+          mvn -B -q -f DiSMC-source/pom.xml dependency:build-classpath \
+            -Dmdep.outputFile="$GITHUB_WORKSPACE/target-deps.txt"
+      - name: Real Spark local frozen capture and R/W and selector replay
+        shell: bash
+        env:
+          SPARK_LOCAL_IP: 127.0.0.1
+        run: |
+          set -euo pipefail
+          bash -n configs/tests/smoke_frozen_local.sh
+          export ARTIFACT_SOURCE_DIR="$GITHUB_WORKSPACE/DiSMC-source"
+          export ARTIFACT_RESULTS_DIR="$RUNNER_TEMP/dismc-final-frozen-smoke"
+          export ARTIFACT_CLASSPATH="$ARTIFACT_SOURCE_DIR/target/dismc-unified-1.0.0.jar:$(cat target-deps.txt)"
+          bash configs/tests/smoke_frozen_local.sh
+      - name: Scan released filenames for credential patterns
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import re,subprocess,zipfile
+          names=subprocess.check_output(["git","ls-files"],text=True).splitlines()
+          with zipfile.ZipFile("artifact/DiSMC-source-release.zip") as archive:
+              names.extend(archive.namelist())
+              assert archive.testzip() is None
+          bad=re.compile(r"(^|/)(?:\.env(?:\..*)?|id_rsa|id_ed25519|credentials(?:\.json)?|[^/]*\.(?:pem|key|p12|pfx))$",re.I)
+          hits=[path for path in names if bad.search(path)]
+          if hits: raise SystemExit("Credential-like filename(s): "+repr(hits))
+          print("Checked",len(names),"tracked/archive names; no credential file pattern detected")
+          PY
