@@ -1,0 +1,1 @@
+["java", "-ea", "-cp", "target/check-classes:target/dismc-unified-1.0.0.jar:${SPARK_HOME}/jars/*", "com.BudgetCompatibilityTest"]

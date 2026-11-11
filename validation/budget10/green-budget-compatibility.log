@@ -1,0 +1,35 @@
+CONFIG micro=true budget=0.10 diagnostic=true accepted=true
+CONFIG micro=true budget=null diagnostic=false accepted=true
+CONFIG micro=true budget=0.01 diagnostic=false accepted=true
+CONFIG micro=true budget=0.02 diagnostic=true accepted=true
+CONFIG micro=true budget=0.02 diagnostic=false accepted=false
+CONFIG micro=true budget=0.03 diagnostic=true accepted=true
+CONFIG micro=true budget=0.03 diagnostic=false accepted=false
+CONFIG micro=true budget=0.05 diagnostic=true accepted=true
+CONFIG micro=true budget=0.05 diagnostic=false accepted=false
+CONFIG micro=true budget=0.10 diagnostic=true accepted=true
+CONFIG micro=true budget=0.10 diagnostic=false accepted=false
+CONFIG micro=true budget=0 diagnostic=true accepted=false
+CONFIG micro=true budget=-0.01 diagnostic=true accepted=false
+CONFIG micro=true budget=0.099999999999 diagnostic=true accepted=false
+CONFIG micro=true budget=0.100000000001 diagnostic=true accepted=false
+CONFIG micro=true budget=0.2 diagnostic=true accepted=false
+CONFIG micro=true budget=1 diagnostic=true accepted=false
+CONFIG micro=true budget=NaN diagnostic=true accepted=false
+CONFIG micro=true budget=Infinity diagnostic=true accepted=false
+CONFIG micro=true budget=-Infinity diagnostic=true accepted=false
+CONFIG micro=false budget=0 diagnostic=true accepted=true
+CONFIG micro=false budget=0.01 diagnostic=true accepted=true
+CONFIG micro=false budget=0.05 diagnostic=true accepted=true
+CONFIG micro=false budget=0.10 diagnostic=true accepted=true
+CONFIG micro=false budget=0.2 diagnostic=true accepted=true
+CONFIG micro=false budget=1 diagnostic=true accepted=true
+CONFIG micro=false budget=-0.01 diagnostic=true accepted=true
+CONFIG micro=false budget=NaN diagnostic=true accepted=true
+CONFIG micro=false budget=Infinity diagnostic=true accepted=true
+PLANNER fraction=0.0 cap=0 extra=0
+PLANNER fraction=0.01 cap=32653 extra=28760
+PLANNER fraction=0.05 cap=163265 extra=28760
+PLANNER fraction=0.1 cap=326531 extra=28760
+PLANNER fraction=1.0 cap=3265316 extra=28760
+BudgetCompatibilityTest passed

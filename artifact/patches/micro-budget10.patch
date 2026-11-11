@@ -1,0 +1,13 @@
+--- a/src/main/java/com/ExperimentConfig.java
++++ b/src/main/java/com/ExperimentConfig.java
+@@ -152,8 +152,8 @@
+         double diagnosticBudget = conf.getDouble("spark.skyline.shardReadBudget", 0.01);
+         boolean budgetDiagnostic = conf.getBoolean("spark.skyline.budgetDiagnostic", false);
+         if (microPartition && diagnosticBudget != 0.01
+-                && !(budgetDiagnostic && (diagnosticBudget == 0.02 || diagnosticBudget == 0.03 || diagnosticBudget == 0.05)))
+-            throw new IllegalArgumentException("micro default budget is 0.01; explicit diagnostics permit 0.02/0.03/0.05");
++                && !(budgetDiagnostic && (diagnosticBudget == 0.02 || diagnosticBudget == 0.03 || diagnosticBudget == 0.05 || diagnosticBudget == 0.10)))
++            throw new IllegalArgumentException("micro default budget is 0.01; explicit diagnostics permit 0.02/0.03/0.05/0.10");
+         if (!microPartition && (conf.contains(PREFIX + "microPartitionMode") || !microPartitionReplay.isEmpty()
+                 || conf.contains(PREFIX + "microCostModel") || conf.contains(PREFIX + "microTaskOrder") || conf.contains(PREFIX + "microPlannerPolicy")))
+             throw new IllegalArgumentException("micro mode/replay requires microPartition=true");
